@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class ApplicationUser extends BaseEntity {
 
-    private String eticketId;
-    private String password;
+    private String authId;
     private UserDetailInformation detailedInformation;
     private LocalDateTime addedOn;
     private LocalDateTime lastLogin;
@@ -18,23 +17,13 @@ public class ApplicationUser extends BaseEntity {
     public ApplicationUser() {
     }
 
-    @Column(name = "eticket_id", nullable = false, unique = true)
-    public String getEticketId() {
-        return eticketId;
+    @Column(name = "auth_id", nullable = false, unique = true)
+    public String getAuthId() {
+        return authId;
     }
 
-    public ApplicationUser setEticketId(String eticketId) {
-        this.eticketId = eticketId;
-        return this;
-    }
-
-    @Column(name = "password", nullable = false)
-    public String getPassword() {
-        return password;
-    }
-
-    public ApplicationUser setPassword(String password) {
-        this.password = password;
+    public ApplicationUser setAuthId(String authId) {
+        this.authId = authId;
         return this;
     }
 
