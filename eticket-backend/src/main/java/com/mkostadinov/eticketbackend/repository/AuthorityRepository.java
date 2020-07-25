@@ -1,9 +1,9 @@
 package com.mkostadinov.eticketbackend.repository;
 
-import com.mkostadinov.eticketbackend.model.entity.ApplicationAuthority;
+import com.mkostadinov.eticketbackend.model.entity.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ApplicationAuthorityRepository extends JpaRepository<ApplicationAuthority, String> {
+public interface AuthorityRepository extends JpaRepository<Authority, String> {
 }

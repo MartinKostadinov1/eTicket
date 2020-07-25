@@ -7,11 +7,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "authorities")
-public class ApplicationAuthority extends BaseEntity {
+public class Authority extends BaseEntity {
 
     private String authorityName;
 
-    public ApplicationAuthority() {
+    public Authority() {
     }
 
     @Column(name = "authority_name", nullable = false, unique = true)
@@ -19,7 +19,7 @@ public class ApplicationAuthority extends BaseEntity {
         return authorityName;
     }
 
-    public ApplicationAuthority setAuthorityName(String authorityName) {
+    public Authority setAuthorityName(String authorityName) {
         this.authorityName = authorityName;
         return this;
     }

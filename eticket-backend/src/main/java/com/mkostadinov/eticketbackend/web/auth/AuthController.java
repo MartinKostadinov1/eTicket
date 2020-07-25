@@ -1,4 +1,4 @@
-package com.mkostadinov.eticketbackend.web;
+package com.mkostadinov.eticketbackend.web.auth;
 
 import com.auth0.AuthenticationController;
 import com.auth0.IdentityVerificationException;
@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.mkostadinov.eticketbackend.constants.GlobalConstants.API_URL;
+import static com.mkostadinov.eticketbackend.constants.GlobalConstants.LOGIN_SUCCESS_CALLBACK;
+
 @Controller
 public class AuthController {
 
@@ -30,15 +33,14 @@ public class AuthController {
 
     @GetMapping(value = "/login")
     protected void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String redirectUri = "http://localhost:8080/callback";
-        String authorizeUrl = authenticationController.buildAuthorizeUrl(request, response, redirectUri)
+        String authorizeUrl = authenticationController.buildAuthorizeUrl(request, response, LOGIN_SUCCESS_CALLBACK)
                 .withScope("openid email")
                 .build();
         response.sendRedirect(authorizeUrl);
     }
 
 
-    @GetMapping(value="/callback")
+    @GetMapping(value = "/callback")
     public void callback(HttpServletRequest request, HttpServletResponse response) throws IdentityVerificationException, IOException {
         Tokens tokens = authenticationController.handle(request, response);
 
@@ -48,11 +50,6 @@ public class AuthController {
         authToken2.setAuthenticated(true);
 
         SecurityContextHolder.getContext().setAuthentication(authToken2);
-        response.sendRedirect("http://localhost:8080");
-    }
-
-    @GetMapping(value="/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) throws IdentityVerificationException, IOException {
-
+        response.sendRedirect(API_URL);
     }
 }
