@@ -9,6 +9,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
+    console.log("jui")
   }
   ngOnDestroy() {
   }

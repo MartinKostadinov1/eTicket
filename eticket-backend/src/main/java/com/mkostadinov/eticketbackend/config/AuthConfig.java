@@ -3,6 +3,8 @@ package com.mkostadinov.eticketbackend.config;
 import com.auth0.AuthenticationController;
 import com.auth0.jwk.JwkProvider;
 import com.auth0.jwk.JwkProviderBuilder;
+import com.mkostadinov.eticketbackend.utils.JWTAuthentication;
+import com.mkostadinov.eticketbackend.utils.JWTAuthorizationFilter;
 import com.mkostadinov.eticketbackend.web.handlers.LogoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -42,14 +47,12 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http
+        http.cors().and()
                 .authorizeRequests()
-                .antMatchers("/callback", "/login", "/").permitAll()
+                .antMatchers("/callback", "/login", "/", "/session").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .and()
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 .logout().logoutSuccessHandler(this.logoutHandler).permitAll();
     }
 
@@ -60,6 +63,15 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 .withJwkProvider(jwkProvider)
                 .build();
     }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new
+                UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
+    }
+
 
 
 }

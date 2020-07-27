@@ -22,13 +22,41 @@ export class DashboardComponent implements OnInit {
   public clicked: boolean = true;
   public clicked1: boolean = false;
 
-  public monthlyTrips: number = 12;
-  public unpaidTickets: number = 0;
-  public allTimePaidTickets: number = 0;
-  public virtualBalance: number = 0;
-  public virtualBalanceCurrency: string = 'EUR';
+  public vehicles: any[] = [
+    {
+      id: "1",
+      registrationNumber: "BP 3549 BP",
+      tickets: [{}, {}, {}]
+    },
+    {
+      id: "2",
+      registrationNumber: "BP 4512 KO",
+      tickets: [{}, {}, {}, {}, {}, {}, {}, {}, {}]
+    }
+  ]
 
-  public previous: any = { monthlyTrips: 100 };
+  public locations: any[] = [
+    {
+      id: "1",
+      name: "Nebraska",
+      tickets: ['girehiewr', 'sidhiojui9jrnwj'],
+      vehiclesBeenThere: ['1', '2']
+    },
+    {
+      id: "2",
+      name: "ReedView parking slot",
+      tickets: ['90i09jo9neiorg'],
+      vehiclesBeenThere: ['1']
+    },
+    {
+      id: "3",
+      name: "OWms highway Hungary",
+      tickets: ['0oi0weio kw'],
+      vehiclesBeenThere: ['2']
+    }
+  ]
+
+  public totalTicketsMonthly = 12;
 
   constructor() { }
 
@@ -61,33 +89,31 @@ export class DashboardComponent implements OnInit {
 		});
   }
 
-  //Calculates the trips percantabge compared to the previus month
-  get calTripsPercentage() {
-    if(this.monthlyTrips == 0) {
-      return -100;
-    }
-
-    if(this.monthlyTrips == this.previous.monthlyTrips) {
-      return 0;
-    }
-
-    if(this.monthlyTrips > this.previous.monthlyTrips) {
-      let diff = ((this.monthlyTrips/this.previous.monthlyTrips) * 100).toFixed(2)
-      return diff;
-    } else {
-      let diff = (((this.previous.monthlyTrips-this.monthlyTrips)/this.previous.monthlyTrips) * -100).toFixed(2)
-      return diff;
-    }
-
-  }
-
-
-
-
-
   public updateOptions() {
     this.salesChart.data.datasets[0].data = this.data;
     this.salesChart.update();
+  }
+
+  // Claculates what part of all tickets is taken by the tickets of this vehicle
+  //id - vehicle id
+  public calcVehicleUsage(id: string) {
+    let vehicle = this.vehicles.find(v => v.id == id);
+
+    let result = (vehicle.tickets.length / this.totalTicketsMonthly) * 100;
+    let background = '';
+    if(result <= 25) {
+      background = 'bg-gradient-danger';
+    } else if(result <= 35) {
+      background = 'bg-gradient-warning';
+    } else if(result <= 55) {
+      background = 'bg-gradient-primary';
+    } else if(result <= 75) {
+      background = 'bg-gradient-info';
+    } else {
+      background = 'bg-gradient-success';
+    }
+
+    return [{result: result.toFixed(2).replace(".", ","), background: background, fixedResult: result.toFixed(0)}];
   }
 
 }

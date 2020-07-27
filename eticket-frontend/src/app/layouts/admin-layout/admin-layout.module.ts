@@ -14,7 +14,10 @@ import { UserProfileComponent } from '../../pages/user-profile/user-profile.comp
 import { DocumentionComponent } from '../../pages/documentation/documention.component';
 import { TablesComponent } from '../../pages/tables/tables.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AgmCoreModule } from '@agm/core';
+import { environment } from 'src/environments/environment';
 // import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   imports: [
@@ -23,7 +26,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     HttpClientModule,
     NgbModule,
-    ClipboardModule
+    ClipboardModule,
+    AgmCoreModule.forRoot({
+      apiKey: environment.googleApiKey
+    })
   ],
   declarations: [
     DashboardComponent,

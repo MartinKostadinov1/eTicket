@@ -14,8 +14,8 @@
             </div>
           </div>
           <p class="mt-3 mb-0 text-muted text-sm">
-            <span class="text-success mr-2" [ngClass]="calTripsPercentage > 0 ? 'text-success' : 'text-danger'">
-              <i class="fa" [ngClass]="calTripsPercentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i> {{calTripsPercentage}}</span>
+            <span class="mr-2" [ngClass]="calTripsPercentage == 0 ? '' : (calTripsPercentage > 0 ? 'text-success' : 'text-danger')">
+              <i class="fa" [ngClass]="calTripsPercentage == 0 ? '' : (calTripsPercentage > 0 ? 'fa-arrow-up' : 'fa-arrow-down')"></i> {{calTripsPercentage}}</span>
             <span class="text-nowrap">Since last month</span>
           </p>
         </div>

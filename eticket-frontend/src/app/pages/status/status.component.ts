@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-status',
+  selector: 'app-stats',
   templateUrl: './status.component.html',
   styleUrls: ['./status.component.scss']
 })
 export class StatusComponent implements OnInit {
 
   public monthlyTrips: number = 12;
-  public unpaidTickets: number = 0;
-  public allTimePaidTickets: number = 0;
-  public virtualBalance: number = 0;
+  public unpaidTickets: number = 3;
+  public allTimePaidTickets: number = 145;
+  public virtualBalance: number = 234.45;
   public virtualBalanceCurrency: string = 'EUR';
 
   public previous: any = { monthlyTrips: 100 };

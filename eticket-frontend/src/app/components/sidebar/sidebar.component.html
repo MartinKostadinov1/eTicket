@@ -51,7 +51,7 @@
             <span>Support</span>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#!" class="dropdown-item">
+          <a [href]="backendUrl + '/logout'" (click)="doLogout()" class="dropdown-item">
             <i class="ni ni-user-run"></i>
             <span>Logout</span>
           </a>
@@ -107,12 +107,12 @@
             <i class="ni ni-spaceship"></i> Getting started
           </a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard-angular/documentation/colors">
-            <i class="ni ni-palette"></i> Foundation
+        <li class="nav-item">
+          <a class="nav-link" href="/about-us">
+            <i class="ni ni-palette"></i> About us
           </a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard-angular/documentation/alerts">
             <i class="ni ni-ui-04"></i> Components
           </a>

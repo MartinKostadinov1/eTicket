@@ -31,6 +31,10 @@
           <div class=" dropdown-header noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </div>
+          <a routerLinkActive="active" (click)="goToStart()" href="/" class="dropdown-item">
+            <i class="ni ni-button-play"></i>
+            <span>Go to start</span>
+          </a>
           <a routerLinkActive="active" [routerLink]="['/user-profile']" class="dropdown-item">
             <i class="ni ni-single-02"></i>
             <span>My profile</span>
@@ -48,7 +52,7 @@
             <span>Support</span>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#!" class="dropdown-item">
+          <a [href]="backendUrl + '/logout'" (click)="doLogout()" class="dropdown-item">
             <i class="ni ni-user-run"></i>
             <span>Logout</span>
           </a>

@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="header-body">
       <!-- Card stats -->
-      <app-status></app-status>
+      <app-stats></app-stats>
     </div>
   </div>
 </div>
@@ -11,7 +11,17 @@
   <div class="row">
     <div class="col">
       <div class="card shadow border-0">
-        <div id="map-canvas" class="map-canvas" data-lat="40.748817" data-lng="-73.985428" style="height: 600px;"></div>
+        <agm-map [(latitude)]="lat" [(longitude)]="lng" [(zoom)]="zoom" [disableDefaultUI]="true" [zoomControl]="true"
+          [(fitBounds)]='viewport'>
+
+          <agm-marker *ngFor="let marker of markers" [latitude]="marker['lat']" [longitude]="marker['lng']">
+            <agm-info-window>
+              <p>eTicket type: {{ marker.eticket.type }}</p>
+              <a [href]="appUrl + '/eticket?id=' + marker.eticket.id">More info</a>
+            </agm-info-window>
+          </agm-marker>
+
+        </agm-map>
       </div>
     </div>
   </div>

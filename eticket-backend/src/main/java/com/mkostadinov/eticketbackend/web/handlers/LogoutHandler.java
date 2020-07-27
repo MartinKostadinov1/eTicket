@@ -1,6 +1,7 @@
 package com.mkostadinov.eticketbackend.web.handlers;
 
 import com.mkostadinov.eticketbackend.config.AuthConfig;
+import com.mkostadinov.eticketbackend.storage.JwtStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.mkostadinov.eticketbackend.constants.GlobalConstants.API_URL;
+import static com.mkostadinov.eticketbackend.constants.GlobalConstants.FRONTEND_URL;
 
 @Component
 public class LogoutHandler implements LogoutSuccessHandler {
@@ -26,12 +28,13 @@ public class LogoutHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        JwtStorage.deleteSession(request.getSession().getId());
         if (request.getSession() != null) {
             request.getSession().invalidate();
         }
 
         String logoutUrl = domain + "/v2/logout?client_id=" +
                 clientId + "&returnTo=" + API_URL;
-        response.sendRedirect(logoutUrl);
+        response.sendRedirect(FRONTEND_URL);
     }
 }

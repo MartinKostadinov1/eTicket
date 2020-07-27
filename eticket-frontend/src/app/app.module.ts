@@ -1,9 +1,13 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { AgmCoreModule } from '@agm/core';
+import { JwtModule } from '@auth0/angular-jwt';
+
+import {
+  MatDialogModule
+} from '@angular/material';
 
 
 import { AppComponent } from './app.component';
@@ -14,8 +18,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
-import { environment } from 'src/environments/environment';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { GuestGuard } from './shared/guards/guest.guard';
+import { TokenGuard } from './shared/guards/token.guard';
+import { JwtHttpInterceptor } from './interceptors/jwt.interceptor';
 
+export function tokenGetter() {
+  return sessionStorage.getItem('application_access_token');
+}
 
 @NgModule({
   imports: [
@@ -26,16 +36,25 @@ import { environment } from 'src/environments/environment';
     NgbModule,
     RouterModule,
     AppRoutingModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAVQm_k6u_MAiMJUrcEkRyoZdQ530BEtQs'
-    })
+    JwtModule.forRoot({
+      config: {
+        headerName: 'X-AUTH-TOKEN',
+        tokenGetter: tokenGetter,
+      }
+    }),
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    GuestGuard,
+    TokenGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtHttpInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
