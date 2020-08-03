@@ -9,20 +9,30 @@ spring:
       connection-test-query: SELECT 1
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     open-in-view: false
+  security:
+    basic:
+      enabled: false
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ISSUER_URI
 logging:
   level:
     org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-
-security:
-  basic:
-    enabled: false
-
-com:
-  auth0:
-    clientId: "uyOhuaBYoFRYZTXFecH6IwtT0YrzpK2N"
-    domain: "https://eticket.eu.auth0.com"
-    clientSecret: "AOr1c883twSsYO7Lfwob12XRAhQMASzC7zSzD8Qq5LMVQu1oJZTfMySAIZGmqAGR"
+application:
+  access-token: APP_ACCESS_TOKEN
+app:
+  dropbox:
+    access:
+      token: DROPBOX_ACCESS_TOKEN
+auth0:
+  client_id: AUTH0_CLIENT_ID
+  secret: AUTH0_CLIENT_SECRET
+  management:
+    client_id: AUTH0_MANAGMENT_CLIENT_ID
+    audience: AUTH0_MANAGMENT_AUDIENCE
+    secret: AUTH0_MANAGMENT_SECRET

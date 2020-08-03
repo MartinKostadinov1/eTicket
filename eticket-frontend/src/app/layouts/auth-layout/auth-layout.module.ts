@@ -12,8 +12,8 @@ import { StartComponent } from '../../pages/start/start.component';
   imports: [
     CommonModule,
     RouterModule.forChild(AuthLayoutRoutes),
-    FormsModule
-    // NgbModule
+    FormsModule,
+    NgbModule
   ],
   declarations: [
     LoginComponent,

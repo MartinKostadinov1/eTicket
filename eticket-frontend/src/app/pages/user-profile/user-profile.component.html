@@ -1,13 +1,20 @@
-<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="min-height: 600px; background-image: url(assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="min-height: 600px; background-image: url({{backgroundPicture}} ); height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;">
   <!-- Mask -->
   <span class="mask bg-gradient-success opacity-8"></span>
   <!-- Header container -->
   <div class="container-fluid d-flex align-items-center">
     <div class="row">
       <div class="col-lg-7 col-md-10">
-        <h1 class="display-2 text-white">Hello Jesse</h1>
-        <p class="text-white mt-0 mb-5">This is your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
-        <a href="#!" class="btn btn-info">Edit profile</a>
+        <h1 class="display-3 text-white">Hello {{currentUser?.authProviderUser?.username}}</h1>
+        <p class="text-white mt-0 mb-5">This is your profile page. You can change your personal information from here
+        </p>
+        <input #profileBackgroundImageFileUpload type="file" style="display:none"
+          (change)="importBackgroundPicture($event)" />
+        <button (click)="profileBackgroundImageFileUpload.click()" class="btn btn-info">Change background</button>
       </div>
     </div>
   </div>
@@ -19,14 +26,20 @@
         <div class="row justify-content-center">
           <div class="col-lg-3 order-lg-2">
             <div class="card-profile-image">
-              <a href="javascript:void(0)">
-                <img src="assets/img/theme/team-4-800x800.jpg" class="rounded-circle">
+              <input #profileImageFileUpload type="file" style="display:none" (change)="importProfilePicture($event)" />
+              <a (click)="profileImageFileUpload.click()">
+                <img [src]="currentUser.profilePictureUrl || currentUser?.authProviderUser?.picture"
+                  class="rounded-circle">
+                <p class="img__description">Edit</p>
               </a>
             </div>
           </div>
         </div>
         <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
           <div class="d-flex justify-content-between">
+            <div *ngIf="isLoading" class="loader-box">
+              <div class="loader"></div>
+            </div>
           </div>
         </div>
         <div class="card-body pt-0 pt-md-4">
@@ -35,35 +48,29 @@
               <div class="card-profile-stats d-flex justify-content-center mt-md-5">
                 <div>
                   <span class="heading">22</span>
-                  <span class="description">Friends</span>
+                  <span class="description">eTickets</span>
                 </div>
                 <div>
                   <span class="heading">10</span>
-                  <span class="description">Photos</span>
-                </div>
-                <div>
-                  <span class="heading">89</span>
-                  <span class="description">Comments</span>
+                  <span class="description">Vehicles</span>
                 </div>
               </div>
             </div>
           </div>
           <div class="text-center">
             <h3>
-              Jessica Jones<span class="font-weight-light">, 27</span>
+              {{currentUser.firstName}} {{currentUser.lastName}} <span class="font-weight-light"> </span>
             </h3>
             <div class="h5 font-weight-300">
-              <i class="ni location_pin mr-2"></i>Bucharest, Romania
-            </div>
-            <div class="h5 mt-4">
-              <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
+              <i class="ni location_pin mr-2"></i>
+              {{currentUser.city}}, {{currentUser.country}}
             </div>
             <div>
-              <i class="ni education_hat mr-2"></i>University of Computer Science
+              <i
+                class="ni education_hat mr-2"></i>{{currentUser?.authorities ? rolesMapping[currentUser?.authorities[0]?.authorityName] : ''}}
             </div>
             <hr class="my-4" />
-            <p>Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.</p>
-            <a href="javascript:void(0)">Show more</a>
+            <p>{{currentUser.description}}</p>
           </div>
         </div>
       </div>
@@ -76,7 +83,8 @@
               <h3 class="mb-0">My account</h3>
             </div>
             <div class="col-4 text-right">
-              <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+              <button (click)="authService.changePassword()" class="btn btn-sm btn-primary"
+                title="We will send you email to chanage your password">Change Password</button>
             </div>
           </div>
         </div>
@@ -88,13 +96,15 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-username">Username</label>
-                    <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Username" value="lucky.jesse">
+                    <input type="text" id="input-username" class="form-control form-control-alternative"
+                      placeholder="Username" name="username" [(ngModel)]="currentUser?.authProviderUser.username">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-email">Email address</label>
-                    <input type="email" id="input-email" class="form-control form-control-alternative" placeholder="jesse@example.com">
+                    <input type="email" id="input-email" class="form-control form-control-alternative"
+                      placeholder="Email" name="email" readonly [(ngModel)]="currentUser.email">
                   </div>
                 </div>
               </div>
@@ -102,13 +112,15 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-first-name">First name</label>
-                    <input type="text" id="input-first-name" class="form-control form-control-alternative" placeholder="First name" value="Lucky">
+                    <input type="text" id="input-first-name" class="form-control form-control-alternative"
+                      placeholder="First name" name="firstName" [(ngModel)]="currentUser.firstName">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-last-name">Last name</label>
-                    <input type="text" id="input-last-name" class="form-control form-control-alternative" placeholder="Last name" value="Jesse">
+                    <input type="text" id="input-last-name" class="form-control form-control-alternative"
+                      placeholder="Last name" name="lastName" [(ngModel)]="currentUser.lastName">
                   </div>
                 </div>
               </div>
@@ -121,7 +133,8 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label class="form-control-label" for="input-address">Address</label>
-                    <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text">
+                    <input id="input-address" class="form-control form-control-alternative" placeholder="Address"
+                      name="address" [(ngModel)]="currentUser.address" type="text">
                   </div>
                 </div>
               </div>
@@ -129,19 +142,22 @@
                 <div class="col-lg-4">
                   <div class="form-group">
                     <label class="form-control-label" for="input-city">City</label>
-                    <input type="text" id="input-city" class="form-control form-control-alternative" placeholder="City" value="New York">
+                    <input type="text" id="input-city" class="form-control form-control-alternative" placeholder="City"
+                      name="city" [(ngModel)]="currentUser.city">
                   </div>
                 </div>
                 <div class="col-lg-4">
                   <div class="form-group">
                     <label class="form-control-label" for="input-country">Country</label>
-                    <input type="text" id="input-country" class="form-control form-control-alternative" placeholder="Country" value="United States">
+                    <input type="text" id="input-country" class="form-control form-control-alternative"
+                      placeholder="Country" name="country" [(ngModel)]="currentUser.country">
                   </div>
                 </div>
                 <div class="col-lg-4">
                   <div class="form-group">
                     <label class="form-control-label" for="input-country">Postal code</label>
-                    <input type="number" id="input-postal-code" class="form-control form-control-alternative" placeholder="Postal code">
+                    <input type="number" id="input-postal-code" class="form-control form-control-alternative"
+                      placeholder="Post code" name="postCode" [(ngModel)]="currentUser.postCode">
                   </div>
                 </div>
               </div>
@@ -152,9 +168,12 @@
             <div class="pl-lg-4">
               <div class="form-group">
                 <label>About Me</label>
-                <textarea rows="4" class="form-control form-control-alternative" placeholder="A few words about you ...">A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
+                <textarea rows="4" class="form-control form-control-alternative" placeholder="About me"
+                  name="description" [(ngModel)]="currentUser.description"></textarea>
               </div>
             </div>
+
+            <button type="button" (click)="update()" class="btn btn-info">Save changes</button>
           </form>
         </div>
       </div>

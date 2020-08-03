@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import {AuthService} from '../../services/auth.service';
+import { UserSerivce } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-auth-layout',
@@ -13,7 +14,7 @@ export class AuthLayoutComponent implements OnInit, OnDestroy {
   public isCollapsed = true;
   public isLoggedIn = false;
 
-  constructor(private router: Router, private authService: AuthService) { 
+  constructor(private router: Router, private auth: AuthService, private userService: UserSerivce) { 
   }
 
   ngOnInit() {
@@ -25,7 +26,7 @@ export class AuthLayoutComponent implements OnInit, OnDestroy {
       this.isCollapsed = true;
    });
 
-   this.isLoggedIn = this.authService.isAuthenticated();
+   this.isLoggedIn = this.auth.isAuthenticated();
   }
   ngOnDestroy() {
     var html = document.getElementsByTagName("html")[0];
@@ -36,9 +37,5 @@ export class AuthLayoutComponent implements OnInit, OnDestroy {
 
   get backendUrl() {
     return environment.backendUrl;
-  }
-
-  doLogout() {
-    this.authService.logout()
   }
 }

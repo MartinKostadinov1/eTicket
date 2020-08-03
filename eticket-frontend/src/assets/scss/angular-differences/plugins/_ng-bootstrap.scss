@@ -88,7 +88,6 @@ ngb-datepicker {
       .ngb-dp-week {
         border: none;
         .ngb-dp-weekday {
-          color: $primary;
           padding-top: 10px;
           opacity: 0.8;
           font-style: normal !important;
@@ -118,7 +117,7 @@ ngb-datepicker {
             width: 36px;
             height: 36px;
             box-shadow: none;
-            color: #525f7f;
+            color: #525f7f !important;
             border-radius: 50%;
             align-items: center;
             display: grid;
@@ -136,7 +135,7 @@ ngb-datepicker {
             &.range{
               color: $white;
               &:hover{
-                background: #5e72e4;
+                background: #5e72e4 !important;
               }
             }
             &.range-start{
@@ -171,7 +170,7 @@ ngb-datepicker {
 .custom-day.range{
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  color: #fff;
+  // color: #fff;
   background: #5e72e4;
   box-shadow: none;
   font-size: .875rem;

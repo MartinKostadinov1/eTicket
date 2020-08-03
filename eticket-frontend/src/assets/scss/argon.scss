@@ -68,4 +68,37 @@
 @import "custom/vendors";
 
 // Angular Differences
-@import "angular-differences/angular-differences"
+@import "angular-differences/angular-differences";
+
+.loader-box {
+    width: 90px;
+    height: 70px;
+    background-color: white;
+    margin-left: -50px;
+    left: 50%;
+    top: 0%;
+    position: fixed;
+    border-bottom-left-radius: 12%;
+    border-bottom-right-radius: 12%;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid $green;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-left: 20px;
+    margin-top: 10px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

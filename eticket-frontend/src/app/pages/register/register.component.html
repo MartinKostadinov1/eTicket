@@ -3,8 +3,8 @@
     <div class="header-body text-center mb-7">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-6">
-          <h1 class="text-white">Welcome!</h1>
-          <p class="text-lead text-light">Use these awesome forms to login or create new account in your project for free.</p>
+          <h1 class="text-white">Welcome {{auth.userName}}!</h1>
+          <p class="text-lead text-light">Before we let you inside the platform please provide us with some personal information</p>
         </div>
       </div>
     </div>
@@ -15,13 +15,14 @@
     </svg>
   </div>
 </div>
+<div *ngIf="isLoading" class="loader-box"><div class="loader"></div></div>
 <!-- Page content -->
 <div class="container mt--8 pb-5">
   <!-- Table -->
   <div class="row justify-content-center">
     <div class="col-lg-6 col-md-8">
       <div class="card bg-secondary shadow border-0">
-        <div class="card-header bg-transparent pb-5">
+        <!-- <div class="card-header bg-transparent pb-5">
           <div class="text-muted text-center mt-2 mb-4"><small>Sign up with</small></div>
           <div class="text-center">
             <a href="javascript:void(0)" class="btn btn-neutral btn-icon mr-4">
@@ -33,49 +34,164 @@
               <span class="btn-inner--text">Google</span>
             </a>
           </div>
-        </div>
+        </div> -->
         <div class="card-body px-lg-5 py-lg-5">
           <div class="text-center text-muted mb-4">
-            <small>Or sign up with credentials</small>
+            <small class="fields-requirement">{{error}}</small>
           </div>
-          <form role="form">
-            <div class="form-group">
+          <form (submit)='onSubmit(form)' #form="ngForm">
+
+            <!--First name-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['firstName']">{{errors['firstName']}}</small>
+            <div class="pt-1 form-group">
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                  <span class="input-group-text">F</span>
                 </div>
-                <input class="form-control" placeholder="Name" type="text">
+                <input [(ngModel)]="userData.firstName" name="firstName" class="form-control" placeholder="First name"
+                  type="text" required>
               </div>
             </div>
-            <div class="form-group">
+
+            <!-- Sur name
+            <small class="pl-1 fields-requirement" *ngIf="errors['firstName']">{{errors['firstName']}}</small>
+            <div class="pt-1 form-group">
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                  <span class="input-group-text">S</span>
                 </div>
-                <input class="form-control" placeholder="Email" type="email">
+                <input [(ngModel)]="userData.surName" name="surName" class="form-control" placeholder="Sur name"
+                  type="text" required>
+              </div>
+            </div> -->
+
+            <!--Family name-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['lastName']">{{errors['lastName']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">L</span>
+                </div>
+                <input [(ngModel)]="userData.lastName" name="lastName" class="form-control"
+                  placeholder="Last name" type="text" required>
               </div>
             </div>
+
+             <!--Date born-->
+             <small class="pl-1 fields-requirement" *ngIf="errors['dateBorn']">{{errors['dateBorn']}}</small>
             <div class="form-group">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                  <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                 </div>
-                <input class="form-control" placeholder="Password" type="password">
+                <input class="form-control datepicker" placeholder="Select date" [(ngModel)]="dateBornPick" name="dp" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" type="text"/>
               </div>
             </div>
-            <div class="text-muted font-italic"><small>password strength: <span class="text-success font-weight-700">strong</span></small></div>
+
+            <!--Driving license id-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['driverLicenseId']">{{errors['driverLicenseId']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                </div>
+                <input [(ngModel)]="userData.driverLicenseId" name="driverLicenseId" class="form-control"
+                  placeholder="Driving license ID" type="text" required>
+              </div>
+            </div>
+
+            <!--phone-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['phoneNumber']">{{errors['phoneNumber']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                </div>
+                <input [(ngModel)]="userData.phoneNumber" name="phoneNumber" class="form-control"
+                  placeholder="Phone number" type="text" required>
+              </div>
+            </div>
+
+            <!--country-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['country']">{{errors['country']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-flag"></i></span>
+                </div>
+                <select name="country" aria-placeholder="Opa" class="form-control" [(ngModel)]="userData.country" required>
+                  <option [ngValue]="null" [disabled]="true" >Country</option>
+                  <option *ngFor="let c of countryList" [value]="c">{{c}}</option>
+                </select>
+              </div>
+            </div>
+
+            <!--city-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['city']">{{errors['city']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-building-o"></i></span>
+                </div>
+                <input [(ngModel)]="userData.city" name="city" class="form-control"
+                  placeholder="City" type="text" required>
+              </div>
+            </div>
+
+
+            <!--postCode-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['postCode']">{{errors['postCode']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                </div>
+                <input [(ngModel)]="userData.postCode" name="postCode" class="form-control"
+                  placeholder="Post code" type="text" required>
+              </div>
+            </div>
+
+
+            <!--address-->
+            <small class="pl-1 fields-requirement" *ngIf="errors['address']">{{errors['address']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-address-book"></i></span>
+                </div>
+                <input [(ngModel)]="userData.address" name="address" class="form-control"
+                  placeholder="Address" type="text" required>
+              </div>
+            </div>
+
+
+            <small class="pl-1 fields-requirement" *ngIf="errors['description']">{{errors['description']}}</small>
+            <div class="pt-1 form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"></span>
+                </div>
+                <textarea [(ngModel)]="userData.description" name="description" class="form-control"
+                  placeholder="About you" required></textarea>
+              </div>
+            </div>
+
+            <!-- <div class="text-muted font-italic"><small>password strength: <span class="text-success font-weight-700">strong</span></small></div> -->
             <div class="row my-4">
               <div class="col-12">
                 <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input class="custom-control-input" id="customCheckRegister" type="checkbox">
+                  <input (change)="acceptTermsOfUse()" [(ngModel)]="agreeWithTermsOfUse" name="agreeWithTermsOfUse" class="custom-control-input"
+                    id="customCheckRegister" type="checkbox">
                   <label class="custom-control-label" for="customCheckRegister">
-                    <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
+                    <span class="text-muted">I agree with the <a
+                        href="https://github.com/MartinKostadinov1/eTicket/blob/master/LICENSE">Privacy
+                        Policy</a></span>
                   </label>
                 </div>
               </div>
             </div>
             <div class="text-center">
-              <button type="button" class="btn btn-primary mt-4">Create account</button>
+              <button type="submit" class="btn btn-primary mt-4">Create account</button>
             </div>
           </form>
         </div>

@@ -1,22 +1,28 @@
-import {Injectable} from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { UserSerivce } from 'src/app/services/user.service';
 
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
-import {Observable} from 'rxjs/index';
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthGuard implements CanActivate {
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private userService: UserSerivce, private router: Router) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
-
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     if (this.auth.isAuthenticated()) {
-      return true;
-    }
-    else {
+      let exist = localStorage.getItem('user_exists') == 'true' || await this.userService.validateUserExistance();
+      if (exist) {
+        localStorage.setItem('user_exists', 'true')
+        return exist;
+      } else {
+        this.router.navigate(['/register']);
+      }
+    } else {
       this.router.navigate(['/']);
     }
 

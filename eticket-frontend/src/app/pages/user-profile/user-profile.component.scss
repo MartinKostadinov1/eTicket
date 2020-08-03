@@ -1,0 +1,31 @@
+.img__description {
+    position: relative;
+    text-align: center;
+    padding-top: 14px;
+    color: #fff;
+    visibility: hidden;
+    opacity: 0;
+    filter: blur(0px);
+
+    /* transition effect. not necessary */
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.rounded-circle:hover {
+    filter: blur(1px);
+}
+
+.card-profile-image:hover .img__description {
+    visibility: visible;
+    opacity: 1;
+}
+
+.img__description .img__description:hover {
+    visibility: visible;
+    opacity: 1;
+}
+
+textarea {
+    resize: none;
+    height: 200px;
+}

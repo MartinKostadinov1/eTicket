@@ -93,7 +93,6 @@ $colors: map-merge((
   "cyan":       $cyan,
   "white":      $white,
   "gray":       $gray-600,
-  "light":      $gray-400,
   "lighter":    $gray-200,
   "gray-dark":  $gray-800
 ), $colors);
@@ -105,7 +104,7 @@ $success:       $green !default;
 $info:          $teal !default;
 $warning:       $orange !default;
 $danger:        $red !default;
-$light:         $gray-500 !default;
+$light:         #fff !default;
 $dark:          $gray-900 !default;
 $darker:        darken($gray-900, 15%) !default;
 
@@ -624,7 +623,7 @@ $custom-control-indicator-disabled-bg:          $gray-200 !default;
 $custom-control-label-disabled-color:           $gray-600 !default;
 
 $custom-checkbox-indicator-border-radius:       $border-radius-sm !default;
-//$custom-checkbox-indicator-icon-checked:        str-replace(url("data:image/svg+xml !default;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E"), "#", "%23") !default;
+// $custom-checkbox-indicator-icon-checked:        url("data:image/svg+xml !default;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E") !default;
 
 // Custom toggle
 
@@ -971,7 +970,7 @@ $datepicker-cell-width: 36px !default;
 $datepicker-cell-height: 36px !default;
 
 $datepicker-disabled-cell-color: $gray-300 !default;
-$datepicker-disabled-old-new-color: $gray-500 !default;
+$datepicker-disabled-old-new-color: #fff !default;
 
 $datepicker-header-cell-border-radius: $border-radius !default;
 

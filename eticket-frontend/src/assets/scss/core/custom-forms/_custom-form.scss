@@ -14,9 +14,9 @@
                 &::before {
                     border-color: $custom-control-indicator-checked-border-color;
                 }
-                &::after {
-                    background-image: $custom-checkbox-indicator-icon-checked;
-                }
+                // &::after {
+                //     background-image: $custom-checkbox-indicator-icon-checked;
+                // }
             }
         }
 

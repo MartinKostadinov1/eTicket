@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { IUserModel } from 'src/app/models/user/IUserModel';
+import { UserSerivce } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { IUpdateUserModel } from 'src/app/models/user/IUpdateUserModel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile',
@@ -7,9 +12,80 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userService: UserSerivce, protected authService: AuthService, private router: Router) { }
 
-  ngOnInit() {
+  currentUser: Partial<IUserModel> = { authorities: null, authProviderUser: { username: '' } };
+
+  get backgroundPicture() {
+    return this.currentUser.profileBackgroundPictureUrl || 'assets/img/theme/profile-background-default.svg';
+  }
+
+  isLoading: boolean;
+
+
+  rolesMapping: { [key: string]: string } = {
+    "ROLE_ADMIN": "Administartor",
+    "ROLE_USER": "User",
+  }
+
+  profileImageFile: File = null;
+
+  async ngOnInit() {
+    this.isLoading = true;
+    this.currentUser = await this.userService.getCurrentUser().toPromise() || null;
+    this.isLoading = false;
+  }
+
+
+  async update() {
+
+    this.isLoading = true;
+
+    let userToUpdate: IUpdateUserModel = {
+      username: this.currentUser.authProviderUser.username,
+      firstName: this.currentUser.firstName,
+      lastName: this.currentUser.lastName,
+      country: this.currentUser.country,
+      city: this.currentUser.city,
+      address: this.currentUser.address,
+      postCode: this.currentUser.postCode,
+      description: this.currentUser.description,
+      phoneNumber: this.currentUser.phoneNumber
+    }
+
+    await this.userService.updateProfile(userToUpdate);
+    this.currentUser = await this.userService.getCurrentUser().toPromise() || null;
+    this.isLoading = false;
+  }
+
+  async importProfilePicture(event) {
+    this.isLoading = true;
+
+    if (event.target.files.length == 0) {
+      alert("No file selected!");
+      return
+    }
+
+    let updatedUser = await this.userService.updateProfilePicture(event.target.files[0]).catch(_ => { this.isLoading = false; return null; });
+    this.currentUser = updatedUser;
+    this.userService.setUser(updatedUser);
+    this.isLoading = false;
+    window.location.reload();
+
+  }
+
+  async importBackgroundPicture(event) {
+    this.isLoading = true;
+
+    if (event.target.files.length == 0) {
+      alert("No file selected!");
+      return
+    }
+    let updatedUser = await this.userService.updateProfileBackgroundPicture(event.target.files[0]).catch(_ => { this.isLoading = false; return null; });
+    this.currentUser = updatedUser;
+    this.userService.setUser(updatedUser);
+    this.isLoading = false;
+
   }
 
 }

@@ -1,10 +1,10 @@
 package com.mkostadinov.eticketbackend.model.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "vehicles")
@@ -13,6 +13,7 @@ public class Vehicle extends BaseEntity {
     private String registrationNumber;
     private LocalDateTime addedOn;
     private boolean blocked;
+    private Set<Ticket> tickets = new LinkedHashSet<>();
 
     public Vehicle() {
     }
@@ -44,6 +45,16 @@ public class Vehicle extends BaseEntity {
 
     public Vehicle setBlocked(boolean blocked) {
         this.blocked = blocked;
+        return this;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER)
+    public Set<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public Vehicle setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
         return this;
     }
 }

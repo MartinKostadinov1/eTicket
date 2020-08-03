@@ -1,7 +1,7 @@
 <div class="main-content">
   <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
     <div class="container px-4">
-      <a class="navbar-brand" routerLinkActive="active" [routerLink]="['/dashboard']">
+      <a class="navbar-brand" routerLinkActive="active" [routerLink]="['/']">
         <img class="site-logo" src="assets/img/brand/logo-rogue.svg" />
       </a>
       <button class="navbar-toggler" type="button" (click)="isCollapsed=!isCollapsed"
@@ -13,7 +13,7 @@
         <div class="navbar-collapse-header d-md-none">
           <div class="row">
             <div class="col-6 collapse-brand">
-              <a routerLinkActive="active" [routerLink]="['/dashboard']">
+              <a routerLinkActive="active" [routerLink]="['/']">
                 <img src="assets/img/brand/logo.svg">
               </a>
             </div>
@@ -27,20 +27,20 @@
         </div>
         <!-- Navbar items -->
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item" *ngIf="!isLoggedIn">
-            <a class="nav-link nav-link-icon" routerLinkActive="active" [href]="backendUrl + '/register'">
+          <li class="nav-item" *ngIf="!auth.isAuthenticated()">
+            <a class="nav-link nav-link-icon" routerLinkActive="active" [routerLink]="['/register']">
               <i class="ni ni-circle-08"></i>
               <span class="nav-link-inner--text">Register</span>
             </a>
           </li>
-          <li class="nav-item" *ngIf="isLoggedIn">
+          <li class="nav-item" *ngIf="auth.isAuthenticated()">
             <a class="nav-link nav-link-icon" routerLinkActive="active" [routerLink]="['/dashboard']">
               <i class="ni ni-planet"></i>
               <span class="nav-link-inner--text">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item" *ngIf="!isLoggedIn">
-            <a class="nav-link nav-link-icon" routerLinkActive="active" [href]="backendUrl + '/login'">
+          <li class="nav-item" *ngIf="!auth.isAuthenticated()">
+            <a class="nav-link nav-link-icon" routerLinkActive="active" (click)="auth.login()" >
               <i class="ni ni-key-25"></i>
               <span class="nav-link-inner--text">Login</span>
             </a>
@@ -51,8 +51,8 @@
               <span class="nav-link-inner--text">About us</span>
             </a>
           </li>
-          <li class="nav-item" *ngIf="isLoggedIn">
-            <a class="nav-link nav-link-icon" routerLinkActive="active" [href]="backendUrl + '/logout'" (click)="doLogout()">
+          <li class="nav-item" *ngIf="auth.isAuthenticated()">
+            <a class="nav-link nav-link-icon" routerLinkActive="active" (click)="auth.logout()">
               <i class="ni ni-user-run"></i>
               <span class="nav-link-inner--text">Logout</span>
             </a>

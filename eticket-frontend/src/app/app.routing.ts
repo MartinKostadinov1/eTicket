@@ -7,14 +7,14 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { GuestGuard } from './shared/guards/guest.guard';
-import { TokenGuard } from './shared/guards/token.guard';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { SupportComponent } from './pages/support/support.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AuthLayoutComponent,
-    canActivate: [GuestGuard, TokenGuard],
+    canActivate: [GuestGuard],
     children: [
       {
         path: '',
@@ -25,7 +25,7 @@ const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
-    canActivate: [TokenGuard, AuthGuard],
+    canActivate: [AuthGuard],
 
     children: [
       {
@@ -37,6 +37,10 @@ const routes: Routes = [
   {
     path: 'about-us',
     component: AboutUsComponent
+  },
+  {
+    path: 'support',
+    component: SupportComponent
   },
   {
     path: '**',

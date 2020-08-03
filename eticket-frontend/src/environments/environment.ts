@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  googleApiKey: "AIzaSyAVQm_k6u_MAiMJUrcEkRyoZdQ530BEtQs",
-  url: "http://localhost:4200",
-  backendUrl: "http://localhost:8080",
-  redirectFromStartPage: false
+  googleApiKey: "",
+  url: "",
+  backendUrl: "",
+  backendAccessToken: ""
 };
 
 /*

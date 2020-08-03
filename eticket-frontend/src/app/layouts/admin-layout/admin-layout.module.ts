@@ -10,6 +10,7 @@ import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { StatusComponent } from '../../pages/status/status.component';
 import { IconsComponent } from '../../pages/icons/icons.component';
 import { MapsComponent } from '../../pages/map/map.component';
+import { SupportComponent } from '../../pages/support/support.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { DocumentionComponent } from '../../pages/documentation/documention.component';
 import { TablesComponent } from '../../pages/tables/tables.component';
@@ -38,7 +39,8 @@ import { environment } from 'src/environments/environment';
     TablesComponent,
     IconsComponent,
     MapsComponent,
-    StatusComponent
+    StatusComponent,
+    SupportComponent
   ]
 })
 

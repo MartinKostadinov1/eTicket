@@ -4,8 +4,9 @@
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-6">
           <h1 class="text-white">Welcome to eTicket!</h1>
-          <p class="text-lead text-light">eTicket is a platform that provides you with easy, fast and secure payments of
+          <p class="text-lead text-light" *ngIf="userExist">eTicket is a platform that provides you with easy, fast and secure payments of
             trip taxes.</p>
+          <p class="text-lead text-light" *ngIf="!userExist">Before we take you to the platform, please enter some personal information</p>
         </div>
       </div>
     </div>
@@ -21,10 +22,12 @@
   <div class="row justify-content-center">
     <div>
       <div class="card-header bg-transparent pb-5">
-        <div class="text-muted text-center mt-2 mb-3" (click)="toogleRedirect()"><a [href]="isAuthenticated() ? urs.url + '/dashboard' : urs.backendUrl + '/login'" class="btn btn-neutral btn-icon">
-            <span class="btn-inner--text" *ngIf="!isAuthenticated()" >Let's get started</span>
-            <span class="btn-inner--text" *ngIf="isAuthenticated()" >Welcome back, {{principalUsername}}</span>
-          </a>
+        <div class="text-muted text-center mt-2 mb-3" (click)="toggleRedirect()"><button (click)="redirectTo()"
+            class="btn btn-neutral btn-icon">
+            <span class="btn-inner--text" *ngIf="!isAuthenticated()">Sign into eTicket</span>
+            <span class="btn-inner--text" *ngIf="isAuthenticated() && isExistingUser">Welcome back, {{authService.userName}}</span>
+            <span class="btn-inner--text" *ngIf="isAuthenticated() && !isExistingUser">Let's go</span>
+          </button>
         </div>
       </div>
       <div class="card-body px-lg-5 py-lg-5"></div>
