@@ -17,22 +17,27 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ISSUER_URI
+          issuer-uri: 
 logging:
   level:
     org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 application:
-  access-token: APP_ACCESS_TOKEN
+  access-token: 
 app:
   dropbox:
     access:
-      token: DROPBOX_ACCESS_TOKEN
+      token: 
 auth0:
-  client_id: AUTH0_CLIENT_ID
-  secret: AUTH0_CLIENT_SECRET
+  client_id: 
+  secret: 
   management:
-    client_id: AUTH0_MANAGMENT_CLIENT_ID
-    audience: AUTH0_MANAGMENT_AUDIENCE
-    secret: AUTH0_MANAGMENT_SECRET
+    client_id: 
+    audience: 
+    secret: 
+
+external:
+  kat-api:
+    appId: 1
+    apiKey: 1

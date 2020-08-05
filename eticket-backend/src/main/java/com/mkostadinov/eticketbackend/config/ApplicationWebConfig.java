@@ -1,7 +1,7 @@
 package com.mkostadinov.eticketbackend.config;
 
 import com.mkostadinov.eticketbackend.constants.GlobalConstants;
-import com.mkostadinov.eticketbackend.interceptors.ApplicationAccessInterceptor;
+import com.mkostadinov.eticketbackend.web.interceptors.ApplicationAccessInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;

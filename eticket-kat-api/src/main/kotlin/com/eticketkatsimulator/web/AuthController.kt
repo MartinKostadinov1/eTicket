@@ -1,31 +1,31 @@
 package com.eticketkatsimulator.web
 
-import com.eticketkatsimulator.model.auth.AuthResponse
-import com.eticketkatsimulator.service.JWTService
-import com.eticketkatsimulator.storage.AuthStorage
+import com.eticketkatsimulator.service.JwtSigner
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
-import org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.LocalDateTime.now
+
+data class Credentials(val appId: String, val apiKey: String)
 
 @RestController
-class AuthController @Autowired constructor(
-        private val jwtService: JWTService
-) {
+@RequestMapping("/auth")
+class AuthController @Autowired constructor(private val jwtSigner: JwtSigner) {
 
+    private val credentials: MutableMap<String, Credentials> = mutableMapOf(
+            "1" to Credentials("1", "1")
+    )
 
-    @PostMapping(path = ["/api/auth"], produces = [TEXT_EVENT_STREAM_VALUE])
-    fun authenticate(@RequestBody payload: Map<String, String>): Mono<AuthResponse> {
-        val token = jwtService.generate(payload["id"].toString())
+    @PostMapping("/token")
+    fun login(@RequestBody cred: Credentials): Mono<ResponseEntity<String>> {
+        return Mono.justOrEmpty(credentials[cred.appId])
+                .filter { it.apiKey == cred.apiKey }
+                .map {
+                    val jwt = jwtSigner.createJwt(it.appId)
 
-        val authResponse = AuthResponse(token, now())
-
-        AuthStorage.addToken(authResponse)
-        return Mono.just(authResponse)
+                    ResponseEntity.ok().body(String.format("%s", jwt))
+                }
+                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("")))
     }
 }

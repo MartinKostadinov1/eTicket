@@ -22,6 +22,7 @@ public class User extends BaseEntity {
     private String address;
     private LocalDateTime dateBorn;
     private Set<Authority> authorities = new LinkedHashSet<>();
+    private Set<Vehicle> vehicles = new LinkedHashSet<>();
     private String profilePictureUrl;
     private String profileBackgroundPictureUrl;
 
@@ -175,6 +176,17 @@ public class User extends BaseEntity {
 
     public User setProfileBackgroundPictureUrl(String profileBackgroundPictureUrl) {
         this.profileBackgroundPictureUrl = profileBackgroundPictureUrl;
+        return this;
+    }
+
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    public Set<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public User setVehicles(Set<Vehicle> vehicles) {
+        this.vehicles = vehicles;
         return this;
     }
 }

@@ -2,6 +2,7 @@ package com.mkostadinov.eticketbackend.model.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
+import com.mkostadinov.eticketbackend.model.dto.vehicle.VehicleDTO;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -76,6 +77,10 @@ public class UserDTO {
     @JsonProperty(value = "profileBackgroundPictureUrl")
     @Expose
     private String profileBackgroundPictureUrl;
+
+    @JsonProperty(value = "vehicles")
+    @Expose
+    private Set<VehicleDTO>  vehicles;
 
     public UserDTO() {
         this.authorities = new LinkedHashSet<>();
@@ -231,6 +236,15 @@ public class UserDTO {
 
     public UserDTO setProfileBackgroundPictureUrl(String profileBackgroundPictureUrl) {
         this.profileBackgroundPictureUrl = profileBackgroundPictureUrl;
+        return this;
+    }
+
+    public Set<VehicleDTO> getVehicles() {
+        return vehicles;
+    }
+
+    public UserDTO setVehicles(Set<VehicleDTO> vehicles) {
+        this.vehicles = vehicles;
         return this;
     }
 

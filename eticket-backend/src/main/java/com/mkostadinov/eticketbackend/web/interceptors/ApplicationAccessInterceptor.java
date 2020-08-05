@@ -1,4 +1,4 @@
-package com.mkostadinov.eticketbackend.interceptors;
+package com.mkostadinov.eticketbackend.web.interceptors;
 
 
 import com.mkostadinov.eticketbackend.constants.SecurityConstants;

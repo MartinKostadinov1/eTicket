@@ -5,11 +5,14 @@ import com.mkostadinov.eticketbackend.exception.user.UserNotFoundException;
 import com.mkostadinov.eticketbackend.helpers.AuthProviderHelper;
 import com.mkostadinov.eticketbackend.helpers.MaskingHelper;
 import com.mkostadinov.eticketbackend.model.dto.user.*;
+import com.mkostadinov.eticketbackend.model.dto.vehicle.VehicleDTO;
 import com.mkostadinov.eticketbackend.model.entity.User;
+import com.mkostadinov.eticketbackend.model.entity.Vehicle;
 import com.mkostadinov.eticketbackend.repository.AuthorityRepository;
 import com.mkostadinov.eticketbackend.repository.UserRepository;
 import com.mkostadinov.eticketbackend.service.CloudService;
 import com.mkostadinov.eticketbackend.service.UserService;
+import com.mkostadinov.eticketbackend.service.VehicleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,12 +38,13 @@ public class UserServiceImpl implements UserService {
     private final AuthProviderHelper authProviderHelper;
     private final AuthorityRepository authorityRepository;
     private final CloudService cloudService;
+    private final VehicleService vehicleService;
 
     @Value("${auth0.management.audience}")
     private String audience;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, RestTemplate restTemplate, MaskingHelper maskingHelper, AuthProviderHelper authProviderHelper, AuthorityRepository authorityRepository, CloudService cloudService) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, RestTemplate restTemplate, MaskingHelper maskingHelper, AuthProviderHelper authProviderHelper, AuthorityRepository authorityRepository, CloudService cloudService, VehicleService vehicleService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.restTemplate = restTemplate;
@@ -46,6 +52,7 @@ public class UserServiceImpl implements UserService {
         this.authProviderHelper = authProviderHelper;
         this.authorityRepository = authorityRepository;
         this.cloudService = cloudService;
+        this.vehicleService = vehicleService;
     }
 
     @Override
@@ -118,6 +125,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User newUser = this.modelMapper.map(userDTO, User.class);
+        this.vehicleService.flushNewUserVehicles(newUser.getDriverLicenseId());
         this.userRepository.saveAndFlush(newUser);
 
         userDTO.setId(newUser.getId());
@@ -184,6 +192,18 @@ public class UserServiceImpl implements UserService {
 
         return dbUser;
     }
+
+    @Override
+    public UserDTO findByDriverLicenseId(String driverLicenseId) {
+        return this.userRepository.findByDriverLicenseId(driverLicenseId)
+                .map(u -> this.modelMapper.map(u, UserDTO.class)).orElse(null);
+    }
+
+    @Override
+    public void saveUser(UserDTO userDTO) {
+        this.userRepository.saveAndFlush(this.modelMapper.map(userDTO, User.class));
+    }
+
 
     private AuthProviderUserDTO updateAuthProviderUser(AuthProviderUserUpdateDTO authProviderUserUpdateDTO, String authProviderUserId) {
         HttpHeaders headers = new HttpHeaders();

@@ -8,7 +8,6 @@ plugins {
 }
 
 group = "com.eticket-kat-simulator"
-version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -25,6 +24,14 @@ dependencies {
 	implementation("io.fusionauth:fusionauth-jwt:3.5.3")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+
+	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	// JJWT
+	implementation("io.jsonwebtoken:jjwt-api:0.11.1")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.1")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}

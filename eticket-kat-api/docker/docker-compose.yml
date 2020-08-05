@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  api:
+    image: mkostadinov/eticket-kat-api
+    ports:
+      - 8888:8888
+    depends_on:
+      - mongo
+    links:
+      - mongo
+
+  mongo:
+      image: mongo:4.4
+      container_name: mongo
+      ports:
+        - "27017:27017"
+
