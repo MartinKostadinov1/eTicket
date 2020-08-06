@@ -6,7 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class TicketCreationDTO {
+public class TicketDTO {
+
+    @Expose
+    private String id;
 
     @Expose
     private String locationName;
@@ -15,7 +18,18 @@ public class TicketCreationDTO {
     private String locationCoordinates;
 
     @Expose
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
+
+    @Expose
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime paidOn;
+
+    @Expose
+    private boolean isPaid;
+
+    @Expose
+    private boolean isDeleted;
 
     @Expose
     private BigDecimal amount;
@@ -29,15 +43,23 @@ public class TicketCreationDTO {
     @Expose
     private String vehicleRegistrationNumber;
 
+    public TicketDTO() {
+    }
 
-    public TicketCreationDTO() {
+    public String getId() {
+        return id;
+    }
+
+    public TicketDTO setId(String id) {
+        this.id = id;
+        return this;
     }
 
     public String getLocationName() {
         return locationName;
     }
 
-    public TicketCreationDTO setLocationName(String locationName) {
+    public TicketDTO setLocationName(String locationName) {
         this.locationName = locationName;
         return this;
     }
@@ -46,27 +68,52 @@ public class TicketCreationDTO {
         return locationCoordinates;
     }
 
-    public TicketCreationDTO setLocationCoordinates(String locationCoordinates) {
+    public TicketDTO setLocationCoordinates(String locationCoordinates) {
         this.locationCoordinates = locationCoordinates;
         return this;
     }
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public TicketCreationDTO setCreatedOn(LocalDateTime createdOn) {
+    public TicketDTO setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
         return this;
     }
 
+    public LocalDateTime getPaidOn() {
+        return paidOn;
+    }
+
+    public TicketDTO setPaidOn(LocalDateTime paidOn) {
+        this.paidOn = paidOn;
+        return this;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public TicketDTO setPaid(boolean paid) {
+        isPaid = paid;
+        return this;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public TicketDTO setDeleted(boolean deleted) {
+        isDeleted = deleted;
+        return this;
+    }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public TicketCreationDTO setAmount(BigDecimal amount) {
+    public TicketDTO setAmount(BigDecimal amount) {
         this.amount = amount;
         return this;
     }
@@ -75,7 +122,7 @@ public class TicketCreationDTO {
         return ticketType;
     }
 
-    public TicketCreationDTO setTicketType(String ticketType) {
+    public TicketDTO setTicketType(String ticketType) {
         this.ticketType = ticketType;
         return this;
     }
@@ -84,7 +131,7 @@ public class TicketCreationDTO {
         return description;
     }
 
-    public TicketCreationDTO setDescription(String description) {
+    public TicketDTO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -93,7 +140,7 @@ public class TicketCreationDTO {
         return vehicleRegistrationNumber;
     }
 
-    public TicketCreationDTO setVehicleRegistrationNumber(String vehicleRegistrationNumber) {
+    public TicketDTO setVehicleRegistrationNumber(String vehicleRegistrationNumber) {
         this.vehicleRegistrationNumber = vehicleRegistrationNumber;
         return this;
     }

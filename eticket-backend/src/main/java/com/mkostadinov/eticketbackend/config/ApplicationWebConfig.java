@@ -1,6 +1,7 @@
 package com.mkostadinov.eticketbackend.config;
 
 import com.mkostadinov.eticketbackend.constants.GlobalConstants;
+import com.mkostadinov.eticketbackend.web.interceptors.ApiInterceptor;
 import com.mkostadinov.eticketbackend.web.interceptors.ApplicationAccessInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.ErrorPage;
@@ -21,6 +22,10 @@ public class ApplicationWebConfig implements WebMvcConfigurer {
     @Value("${application.access-token}")
     private String applicationAccessToken;
 
+
+    @Value("${application.api-token}")
+    private String apiToken;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins(GlobalConstants.FRONTEND_URL).allowedMethods("*").allowCredentials(true);
@@ -28,23 +33,24 @@ public class ApplicationWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ApplicationAccessInterceptor(this.applicationAccessToken));
+        registry.addInterceptor(new ApplicationAccessInterceptor(this.applicationAccessToken)).addPathPatterns("/api/**").excludePathPatterns("/api/external/**");
+        registry.addInterceptor(new ApiInterceptor(this.apiToken)).addPathPatterns("/api/external/**");
     }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/notFound").setViewName("errors/403");
-        registry.addViewController("/error").setViewName("errors/403");
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
-        return container -> {
-            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
-                    "/notFound"));
-            container.addErrorPages(new ErrorPage(HttpStatus.UNAUTHORIZED,
-                    "/error"));
-        };
-    }
+//
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/notFound").setViewName("errors/403");
+//        registry.addViewController("/error").setViewName("errors/403");
+//    }
+//
+//    @Bean
+//    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
+//        return container -> {
+//            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
+//                    "/notFound"));
+//            container.addErrorPages(new ErrorPage(HttpStatus.UNAUTHORIZED,
+//                    "/error"));
+//        };
+//    }
 
 }

@@ -123,4 +123,10 @@ export class AuthService {
     }
   }
 
+  get email() {
+    if (this.userProfile) {
+      return this.userProfile.email;
+    }
+  }
+
 }

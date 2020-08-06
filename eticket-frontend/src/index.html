@@ -32,9 +32,17 @@
   <link href="./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
 
 </head>
 <body>
   <app-root></app-root>
+  <script src="https://js.stripe.com/v3/" data-locale="auto"></script>
+  <script type="text/javascript">
+    var stripe = Stripe('pk_test_51H3yLSFGFEZHS7SEy2IQTdUhUbNqWkc4o9llu31P9BHHxlmLYREt6N1fDCbJa7Q48n6CpyRnG6l7f22ltVhwmeuZ00wE3EVGxG', {
+      locale: 'en'
+    });
+    var elements = stripe.elements();
+  </script>
 </body>
 </html>

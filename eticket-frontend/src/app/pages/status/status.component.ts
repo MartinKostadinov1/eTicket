@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { IDashboardStatusWidget } from 'src/app/models/dashboard/IDashboardStatusWidget';
 
 @Component({
   selector: 'app-stats',
@@ -7,37 +9,39 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatusComponent implements OnInit {
 
-  public monthlyTrips: number = 12;
-  public unpaidTickets: number = 3;
-  public allTimePaidTickets: number = 145;
-  public virtualBalance: number = 234.45;
-  public virtualBalanceCurrency: string = 'EUR';
 
-  public previous: any = { monthlyTrips: 100 };
+  dashboardWidget: IDashboardStatusWidget = { monthlyTrips: 0, previousMonthTrips: 0, unpaidTickets: 0,  allPaidTickets: 0,vehicleCount: 0 };
 
-  constructor() { }
+constructor(private dashboardService: DashboardService) { }
 
-  ngOnInit() {
-  }
+async ngOnInit() {
+  this.dashboardWidget = await this.dashboardService.getDashBoardStatusWidget();
+}
 
-  //Calculates the trips percantabge compared to the previus month
-  get calTripsPercentage() {
-    if(this.monthlyTrips == 0) {
+//Calculates the trips percantabge compared to the previus month
+get calTripsPercentage() {
+  if (this.dashboardWidget) {
+    if (this.dashboardWidget.monthlyTrips == 0) {
       return -100;
     }
 
-    if(this.monthlyTrips == this.previous.monthlyTrips) {
+    if (this.dashboardWidget.previousMonthTrips == 0) {
+      return 100;
+    }
+
+    if (this.dashboardWidget.monthlyTrips == this.dashboardWidget.previousMonthTrips) {
       return 0;
     }
 
-    if(this.monthlyTrips > this.previous.monthlyTrips) {
-      let diff = ((this.monthlyTrips/this.previous.monthlyTrips) * 100).toFixed(2)
+    if (this.dashboardWidget.monthlyTrips > this.dashboardWidget.previousMonthTrips) {
+      let diff = ((this.dashboardWidget.monthlyTrips / this.dashboardWidget.previousMonthTrips) * 100).toFixed(2)
       return diff;
     } else {
-      let diff = (((this.previous.monthlyTrips-this.monthlyTrips)/this.previous.monthlyTrips) * -100).toFixed(2)
+      let diff = (((this.dashboardWidget.previousMonthTrips - this.dashboardWidget.monthlyTrips) / this.dashboardWidget.previousMonthTrips) * -100).toFixed(2)
       return diff;
     }
-
   }
+
+}
 
 }

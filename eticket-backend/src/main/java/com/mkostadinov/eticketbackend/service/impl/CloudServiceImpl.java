@@ -61,7 +61,7 @@ public class CloudServiceImpl implements CloudService {
             if (sharedLinkMetadata == null) return false;
             client.files().deleteV2(sharedLinkMetadata.getPathLower());
             return true;
-        } catch (DbxException | NullPointerException e) {
+        } catch (Exception e) {
             log.error("File deletion failed.");
         }
         return false;
@@ -72,7 +72,7 @@ public class CloudServiceImpl implements CloudService {
         try {
             in = file.getInputStream();
             client.files().uploadBuilder(imagePath).uploadAndFinish(in);
-        } catch (IOException | DbxException e) {
+        } catch (Exception e) {
             log.error("File upload failed.");
         }
     }
@@ -80,7 +80,7 @@ public class CloudServiceImpl implements CloudService {
     private SharedLinkMetadata createSharedLinkFromPath(String path) {
         try {
             return client.sharing().createSharedLinkWithSettings(path);
-        } catch (DbxException e) {
+        } catch (Exception e) {
             log.error("Creating shared link failed.");
         }
         return null;
@@ -89,7 +89,7 @@ public class CloudServiceImpl implements CloudService {
     private SharedLinkMetadata getSharedLinkMetadata(String url) {
         try {
             return client.sharing().getSharedLinkMetadata(url);
-        } catch (DbxException | NullPointerException e) {
+        } catch (Exception e) {
             log.error("Retrieving shared link failed.");
         }
         return null;

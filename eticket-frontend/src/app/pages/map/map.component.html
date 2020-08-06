@@ -1,7 +1,6 @@
 <div class="header bg-gradient-success pb-8 pt-5 pt-md-8">
   <div class="container-fluid">
     <div class="header-body">
-      <!-- Card stats -->
       <app-stats></app-stats>
     </div>
   </div>
@@ -16,8 +15,8 @@
 
           <agm-marker *ngFor="let marker of markers" [latitude]="marker['lat']" [longitude]="marker['lng']">
             <agm-info-window>
-              <p>eTicket type: {{ marker.eticket.type }}</p>
-              <a [href]="appUrl + '/eticket?id=' + marker.eticket.id">More info</a>
+              <p>eTicket type: {{ marker.ticket.type }}</p>
+              <!-- <a [href]="appUrl + '/eticket?id=' + marker.ticket.id">More info</a> -->
             </agm-info-window>
           </agm-marker>
 

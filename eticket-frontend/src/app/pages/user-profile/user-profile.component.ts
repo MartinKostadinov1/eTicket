@@ -4,6 +4,7 @@ import { UserSerivce } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { IUpdateUserModel } from 'src/app/models/user/IUpdateUserModel';
 import { Router } from '@angular/router';
+import { DashboardService } from 'src/app/services/dashboard.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -12,7 +13,8 @@ import { Router } from '@angular/router';
 })
 export class UserProfileComponent implements OnInit {
 
-  constructor(private userService: UserSerivce, protected authService: AuthService, private router: Router) { }
+  constructor(private userService: UserSerivce, protected authService: AuthService, private router: Router, private dashboardService: DashboardService
+  ) { }
 
   currentUser: Partial<IUserModel> = { authorities: null, authProviderUser: { username: '' } };
 
@@ -20,7 +22,7 @@ export class UserProfileComponent implements OnInit {
     return this.currentUser.profileBackgroundPictureUrl || 'assets/img/theme/profile-background-default.svg';
   }
 
-  isLoading: boolean;
+  isLoading: boolean = true;
 
 
   rolesMapping: { [key: string]: string } = {
@@ -30,10 +32,17 @@ export class UserProfileComponent implements OnInit {
 
   profileImageFile: File = null;
 
+  ticketsCount: number = 0;
+  vehiclesCount: number = 0;
+
   async ngOnInit() {
-    this.isLoading = true;
     this.currentUser = await this.userService.getCurrentUser().toPromise() || null;
     this.isLoading = false;
+
+    let dashboradData = await this.dashboardService.getDashBoardStatusWidget();
+
+    this.ticketsCount = dashboradData.allPaidTickets;
+    this.vehiclesCount = dashboradData.vehicleCount;
   }
 
 

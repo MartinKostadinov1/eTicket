@@ -10,4 +10,6 @@ public interface VehicleService {
 
     void createVehicle(VehicleCreationDTO vehicle);
     void flushNewUserVehicles(String drivingLicenseIds);
+    VehicleDTO findByRegistrationNumber(String registrationNumber);
+    void saveVehicle(VehicleDTO vehicle);
 }

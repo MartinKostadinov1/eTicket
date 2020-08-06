@@ -86,4 +86,14 @@ public class VehicleServiceImpl implements VehicleService {
             });
         }
     }
+
+    @Override
+    public VehicleDTO findByRegistrationNumber(String registrationNumber) {
+        return this.vehicleRepository.findByRegistrationNumber(registrationNumber).map(v -> this.modelMapper.map(v, VehicleDTO.class)).orElse(null);
+    }
+
+    @Override
+    public void saveVehicle(VehicleDTO vehicle) {
+        this.vehicleRepository.saveAndFlush(this.modelMapper.map(vehicle, Vehicle.class));
+    }
 }

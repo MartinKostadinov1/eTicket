@@ -16,7 +16,7 @@
               <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
               <h2 class="text-white mb-0">Sales value</h2>
             </div>
-            <div class="col">
+            <!-- <div class="col">
               <ul class="nav nav-pills justify-content-end">
                 <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales"
                   (click)="data=datasets[0];updateOptions()">
@@ -35,7 +35,7 @@
                   </a>
                 </li>
               </ul>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="card-body">
@@ -95,7 +95,7 @@
                   {{l.name}}
                 </th>
                 <td>
-                 {{l.tickets.length}}
+                  {{l.tickets.length}}
                 </td>
                 <td>
                   {{l.vehiclesBeenThere.length}}
@@ -135,12 +135,11 @@
                 </td>
                 <td class="nopadding" *ngFor="for let r of calcVehicleUsage(v.id)">
                   <div class="d-flex align-items-center">
-                    <span class="mr-1">{{r.result}}%</span>
                     <div>
+                      <span class="mb-1">{{r.result}}%</span>
                       <div class="progress">
-                        <div class="progress-bar"
-                          [ngClass]="r.background" role="progressbar"
-                          aria-valuemin="0" aria-valuemax="100" [style]="'width: ' + r.fixedResult + '%;'"></div>
+                        <div class="progress-bar" [ngClass]="r.background" role="progressbar" aria-valuemin="0"
+                          aria-valuemax="100" [style]="'width: ' + r.fixedResult + '%;'"></div>
                       </div>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardService } from 'src/app/services/dashboard.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminLayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dashboardService: DashboardService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.dashboardService.loadUserDashboard();
   }
 
 }

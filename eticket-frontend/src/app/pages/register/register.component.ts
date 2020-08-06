@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserSerivce } from 'src/app/services/user.service';
 import { IUserRegisterModel } from 'src/app/models/user/IUserRegisterModel';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(public auth: AuthService, private userService: UserSerivce, private http: HttpClient, private router: Router) { }
+  constructor(public auth: AuthService, private userService: UserSerivce, private http: HttpClient, private router: Router, private cd: ChangeDetectorRef) { }
 
   async ngOnInit() {
   }
@@ -76,11 +77,11 @@ export class RegisterComponent implements OnInit {
         tempDate.setMonth(this.dateBornPick.month);
         tempDate.setDate(this.dateBornPick.day);
 
-        this.userData.dateBorn = tempDate.toISOString(). 
-        replace(/\..+/, '');
+        this.userData.dateBorn = tempDate.toISOString().
+          replace(/\..+/, '');
 
         let result = await this.userService.register(this.userData);
-        
+
         if (result.status && result.status != 201) {
           this.triggetValidations(result.errors)
         } else {

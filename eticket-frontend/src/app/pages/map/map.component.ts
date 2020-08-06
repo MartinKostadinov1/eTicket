@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { IMapTicketModel } from 'src/app/models/map/IMapTicketModel';
 declare const google: any;
 
 @Component({
@@ -9,21 +11,40 @@ declare const google: any;
 })
 export class MapsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dashboradService: DashboardService) { }
 
 
-  public markers: any = [{ lat: 51.347680, lng: 22.661402780001, eticket: { id: "voj09wejoe", type: "PARKING" } },
-  { lat: 52.347680, lng: 23.661402780001, eticket: { id: "fiejrwo0ef", type: "HIGHWAY" } }];
+  public markers: IMapTicketModel[] = [];
 
   lat: number = 51.247680;
   lng: number = 22.561402780001;
   zoom: number = 15;
-  ngOnInit() {
+
+  async ngOnInit() {
+    let userCurrentLocation = await this.getPosition();
+    this.lat = userCurrentLocation.lat
+    this.lng = userCurrentLocation.lng
+
+    this.markers = await this.dashboradService.getAllTickets()
 
   }
 
   get appUrl() {
     return environment.url;
+  }
+
+  async getPosition(): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      navigator.geolocation.getCurrentPosition(resp => {
+
+        resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
+      },
+        err => {
+          reject(err);
+        });
+    });
+
   }
 
 }

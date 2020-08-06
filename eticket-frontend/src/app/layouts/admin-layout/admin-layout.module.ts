@@ -8,6 +8,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { StatusComponent } from '../../pages/status/status.component';
+import { PaymentComponent } from '../../pages/payment/payment.component';
 import { IconsComponent } from '../../pages/icons/icons.component';
 import { MapsComponent } from '../../pages/map/map.component';
 import { SupportComponent } from '../../pages/support/support.component';
@@ -40,7 +41,8 @@ import { environment } from 'src/environments/environment';
     IconsComponent,
     MapsComponent,
     StatusComponent,
-    SupportComponent
+    SupportComponent,
+    PaymentComponent
   ]
 })
 
