@@ -30,6 +30,8 @@ export class DashboardComponent implements OnInit {
 
   public totalTicketsMonthly = 0;
 
+  public totalTicketsAllTime = 0;
+
   private chartsData: IDashboardChartsModel = { expenses: new Map(), tickets: new Map() };
 
 
@@ -43,6 +45,8 @@ export class DashboardComponent implements OnInit {
     this.mostUsedVehicles();
 
     this.vehicles = this.vehicles.sort((a, b) => b.tickets.length - a.tickets.length)
+
+    this.vehicles.forEach(v => this.totalTicketsAllTime += v.tickets.length)
 
   }
 
@@ -58,15 +62,15 @@ export class DashboardComponent implements OnInit {
       expensesData[Number(Month[m])] = Number(this.chartsData.expenses[m]) || 0;
     })
 
-    ticketsChart.data.datasets.push({
+    ticketsChart.data.datasets = [{
       label: "Tickets",
       data: ticketsData
-    })
+    }]
 
-    expensesChart.data.datasets.push({
+    expensesChart.data.datasets = [{
       label: 'Expenses',
       data: expensesData
-    })
+    }]
 
     parseOptions(Chart, chartOptions());
 
@@ -95,15 +99,15 @@ export class DashboardComponent implements OnInit {
   public calcVehicleUsage(id: string) {
     let vehicle = this.vehicles.find(v => v.id == id);
 
-    let dateNow = new Date();
 
-    let tickets = vehicle.tickets.filter(t => !t.isDeleted && new Date(t.createdOn).getMonth() == dateNow.getMonth());
+    let tickets = vehicle.tickets;
+
 
     if (tickets.length == 0) {
       return [{ result: 0, background: '', fixedResult: 0 }];
     }
 
-    let result = (tickets.length / this.totalTicketsMonthly) * 100;
+    let result = (tickets.length / this.totalTicketsAllTime) * 100;
     let background = '';
     if (result <= 25) {
       background = 'bg-gradient-danger';
@@ -137,7 +141,7 @@ export class DashboardComponent implements OnInit {
       locations[ticket.ticket.locationName].tickets.push(ticket.ticket);
     }
 
-    let topLocations = Object.keys(locations).sort((a, b) => locations[b].tickets.length -locations[a].tickets.length)
+    let topLocations = Object.keys(locations).sort((a, b) => locations[b].tickets.length - locations[a].tickets.length)
 
     if (topLocations.length >= 5) topLocations = topLocations.slice(0, 4);
 

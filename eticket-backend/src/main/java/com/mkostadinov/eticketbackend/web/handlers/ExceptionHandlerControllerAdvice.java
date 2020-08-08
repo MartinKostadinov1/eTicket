@@ -20,7 +20,7 @@ public class ExceptionHandlerControllerAdvice {
     @ExceptionHandler({UnauthorizedUserException.class})
     public ModelAndView userIsNotAuthorized() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("errors/403");
+        modelAndView.setViewName("error");
 
         return modelAndView;
     }

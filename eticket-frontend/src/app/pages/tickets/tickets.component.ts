@@ -18,7 +18,7 @@ export class TicketsComponent implements OnInit {
 
   public tickets: IMapTicketModel[] = [];
 
-  public itemsPerPage = 6;
+  public itemsPerPage = 7;
   public currentPage = 1;
   public totalPages = 0;
   public pages = [];

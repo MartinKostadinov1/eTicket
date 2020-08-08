@@ -313,6 +313,10 @@ export const expensesChart = {
           if (data.datasets.length > 1) {
             content += label;
           }
+
+          if (yLabel != '0' && String(yLabel).includes('.')) {
+            yLabel += '0'
+          }
           content += yLabel;
           return content + ' EUR';
         }
