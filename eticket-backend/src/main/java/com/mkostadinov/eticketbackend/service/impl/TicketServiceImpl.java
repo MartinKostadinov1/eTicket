@@ -85,12 +85,13 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void payTicket(TicketDTO ticketDTO) {
+    public TicketDTO payTicket(TicketDTO ticketDTO) {
         if(ticketDTO == null) { throw new PaymentUnableToProceedException("Ticket doesn't exist"); }
 
         ticketDTO.setPaidOn(LocalDateTime.now());
         ticketDTO.setPaid(true);
 
         this.ticketRepository.saveAndFlush(this.modelMapper.map(ticketDTO, Ticket.class));
+        return ticketDTO;
     }
 }

@@ -41,4 +41,11 @@ public class UserServiceTest extends BaseTest {
             this.userService.findCurrentUser(principal);
         });
     }
+
+    @Test
+    public void findUserByDrivingLicenseId() {
+        UserDTO userDTO = this.userService.findByDriverLicenseId("1234567890");
+
+        Assertions.assertEquals(userDTO.getCity(), "Kozloduy");
+    }
 }
