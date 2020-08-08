@@ -21,6 +21,11 @@ async ngOnInit() {
 //Calculates the trips percantabge compared to the previus month
 get calTripsPercentage() {
   if (this.dashboardWidget) {
+
+    if (this.dashboardWidget.previousMonthTrips == 0 && this.dashboardWidget.monthlyTrips == 0) {
+      return '0';
+    }
+
     if (this.dashboardWidget.monthlyTrips == 0) {
       return -100;
     }
@@ -33,12 +38,12 @@ get calTripsPercentage() {
       return 0;
     }
 
-    if (this.dashboardWidget.monthlyTrips > this.dashboardWidget.previousMonthTrips) {
-      let diff = ((this.dashboardWidget.monthlyTrips / this.dashboardWidget.previousMonthTrips) * 100).toFixed(2)
-      return diff;
+    if(this.dashboardWidget.monthlyTrips > this.dashboardWidget.previousMonthTrips) {
+      let gross = 100 - ((this.dashboardWidget.previousMonthTrips / this.dashboardWidget.monthlyTrips) * 100)
+      return gross.toFixed(2)
     } else {
-      let diff = (((this.dashboardWidget.previousMonthTrips - this.dashboardWidget.monthlyTrips) / this.dashboardWidget.previousMonthTrips) * -100).toFixed(2)
-      return diff;
+      let gross = -100 + ((this.dashboardWidget.previousMonthTrips / this.dashboardWidget.monthlyTrips) * 100)
+      return gross.toFixed(2)
     }
   }
 

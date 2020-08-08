@@ -1,8 +1,12 @@
 package com.mkostadinov.eticketbackend.model.dto.ticket;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -33,6 +37,8 @@ public class TicketCreationDTO {
     public TicketCreationDTO() {
     }
 
+    @NotEmpty
+    @Length(min = 3)
     public String getLocationName() {
         return locationName;
     }
@@ -42,6 +48,8 @@ public class TicketCreationDTO {
         return this;
     }
 
+    @NotEmpty
+    @Length(min = 2)
     public String getLocationCoordinates() {
         return locationCoordinates;
     }
@@ -62,6 +70,8 @@ public class TicketCreationDTO {
     }
 
 
+    @NotEmpty
+    @DecimalMin("0.01")
     public BigDecimal getAmount() {
         return amount;
     }
@@ -71,6 +81,8 @@ public class TicketCreationDTO {
         return this;
     }
 
+    @NotBlank
+    @Length(min = 1)
     public String getTicketType() {
         return ticketType;
     }
@@ -80,6 +92,8 @@ public class TicketCreationDTO {
         return this;
     }
 
+    @NotBlank
+    @Length(min = 1)
     public String getDescription() {
         return description;
     }
@@ -89,6 +103,8 @@ public class TicketCreationDTO {
         return this;
     }
 
+    @NotBlank
+    @Length(min = 7)
     public String getVehicleRegistrationNumber() {
         return vehicleRegistrationNumber;
     }

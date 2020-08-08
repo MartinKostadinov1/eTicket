@@ -1,10 +1,10 @@
 package com.mkostadinov.eticketbackend.service.impl;
 
+import com.mkostadinov.eticketbackend.exception.payment.PaymentUnableToProceedException;
 import com.mkostadinov.eticketbackend.model.dto.ticket.TicketCreationDTO;
 import com.mkostadinov.eticketbackend.model.dto.ticket.TicketDTO;
 import com.mkostadinov.eticketbackend.model.dto.vehicle.VehicleDTO;
 import com.mkostadinov.eticketbackend.model.entity.Ticket;
-import com.mkostadinov.eticketbackend.model.entity.Vehicle;
 import com.mkostadinov.eticketbackend.repository.TicketRepository;
 import com.mkostadinov.eticketbackend.service.TicketService;
 import com.mkostadinov.eticketbackend.service.VehicleService;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -71,5 +72,20 @@ public class TicketServiceImpl implements TicketService {
 
 
         return this.modelMapper.map(ticket, TicketDTO.class);
+    }
+
+    @Override
+    public TicketDTO findById(String ticketId) {
+        return this.ticketRepository.findById(ticketId).map(t -> this.modelMapper.map(t, TicketDTO.class)).orElse(null);
+    }
+
+    @Override
+    public void payTicket(TicketDTO ticketDTO) {
+        if(ticketDTO == null) { throw new PaymentUnableToProceedException("Ticket doesn't exist"); }
+
+        ticketDTO.setPaidOn(LocalDateTime.now());
+        ticketDTO.setPaid(true);
+
+        this.ticketRepository.saveAndFlush(this.modelMapper.map(ticketDTO, Ticket.class));
     }
 }

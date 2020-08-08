@@ -9,4 +9,5 @@ public class GlobalConstants {
     public static final String PROFILE_BACKGROUND_PICTURE_KEY = "profile-background-picture";
 
     public static final String ETICKET_KAT_API_URL = "http://localhost:8888";
+    public static final String APPLICATION_PAYMENT_CURRENCY = "";
 }

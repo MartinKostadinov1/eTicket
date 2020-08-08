@@ -13,8 +13,8 @@
         <div class="card-header bg-transparent">
           <div class="row align-items-center">
             <div class="col">
-              <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-              <h2 class="text-white mb-0">Sales value</h2>
+              <h6 class="text-uppercase text-light ls-1 mb-1">Expenses</h6>
+              <h2 class="text-white mb-0">Monthly expenses for tickets</h2>
             </div>
             <!-- <div class="col">
               <ul class="nav nav-pills justify-content-end">
@@ -42,7 +42,7 @@
           <!-- Chart -->
           <div class="chart">
             <!-- Chart wrapper -->
-            <canvas id="chart-sales" class="chart-canvas"></canvas>
+            <canvas id="chart-expenses" class="chart-canvas"></canvas>
           </div>
         </div>
       </div>
@@ -53,14 +53,14 @@
           <div class="row align-items-center">
             <div class="col">
               <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-              <h2 class="mb-0">Total orders</h2>
+              <h2 class="mb-0">Monthly tickets count</h2>
             </div>
           </div>
         </div>
         <div class="card-body">
           <!-- Chart -->
           <div class="chart">
-            <canvas id="chart-orders" class="chart-canvas"></canvas>
+            <canvas id="chart-tickets" class="chart-canvas"></canvas>
           </div>
         </div>
       </div>
@@ -90,6 +90,7 @@
               </tr>
             </thead>
             <tbody>
+              <div class="mt-3 mb-3 ml-3 mr-3" *ngIf="locations.length == 0">No data</div>
               <tr *ngFor="for let l of locations">
                 <th scope="row">
                   {{l.name}}
@@ -111,7 +112,7 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0">Most used vehicles</h3>
+              <h3 class="mb-0">Vehicles usage</h3>
             </div>
           </div>
         </div>
@@ -122,7 +123,7 @@
               <tr>
                 <th scope="col">Vehicle</th>
                 <th scope="col">Total e-Tickets</th>
-                <th scope="col"></th>
+                <th scope="col">Usage</th>
               </tr>
             </thead>
             <tbody>
@@ -133,11 +134,11 @@
                 <td>
                   {{v.tickets.length}}
                 </td>
-                <td class="nopadding" *ngFor="for let r of calcVehicleUsage(v.id)">
+                <td *ngFor="for let r of calcVehicleUsage(v.id)" [ngClass]="r.result != 0 ? 'nopadding': ''">
                   <div class="d-flex align-items-center">
                     <div>
-                      <span class="mb-1">{{r.result}}%</span>
-                      <div class="progress">
+                      <span class="mb-1">{{r.result != 0 ? (r.result + '%') : 'No'}}</span>
+                      <div class="progress" *ngIf="r.result != 0">
                         <div class="progress-bar" [ngClass]="r.background" role="progressbar" aria-valuemin="0"
                           aria-valuemax="100" [style]="'width: ' + r.fixedResult + '%;'"></div>
                       </div>

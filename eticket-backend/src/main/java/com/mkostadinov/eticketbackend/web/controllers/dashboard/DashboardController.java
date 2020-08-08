@@ -1,6 +1,7 @@
 package com.mkostadinov.eticketbackend.web.controllers.dashboard;
 
 import com.google.gson.Gson;
+import com.mkostadinov.eticketbackend.model.dto.dashboard.ChartsDataDTO;
 import com.mkostadinov.eticketbackend.model.dto.dashboard.DashboardStatusWidgetDTO;
 import com.mkostadinov.eticketbackend.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,10 @@ public class DashboardController {
     @GetMapping("/status-widget")
     public ResponseEntity<DashboardStatusWidgetDTO> statusWidget (Principal principal) {
         return ResponseEntity.ok(this.dashboardService.getStatusWidget(principal));
+    }
+
+    @GetMapping("/charts")
+    public ResponseEntity<ChartsDataDTO> charts(Principal principal) {
+        return ResponseEntity.ok(this.dashboardService.getChartsData(principal));
     }
 }

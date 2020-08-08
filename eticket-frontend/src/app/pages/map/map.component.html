@@ -15,8 +15,12 @@
 
           <agm-marker *ngFor="let marker of markers" [latitude]="marker['lat']" [longitude]="marker['lng']">
             <agm-info-window>
-              <p>eTicket type: {{ marker.ticket.type }}</p>
-              <!-- <a [href]="appUrl + '/eticket?id=' + marker.ticket.id">More info</a> -->
+              <p>Type: {{ marker.ticket.ticketType }}</p>
+              <p>Price: {{ marker.ticket.amount }}</p>
+              <p>Description: {{marker.ticket.description}}</p>
+              <p>Status:
+                {{ marker.ticket.isPaid ? 'PAID' : (marker.ticket.isDeleted ? 'DELETED' : 'UNPAID') }}</p>
+              <a href="/etickets">Go to all eTickets</a>
             </agm-info-window>
           </agm-marker>
 

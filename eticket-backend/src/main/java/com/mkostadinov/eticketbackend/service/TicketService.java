@@ -7,4 +7,6 @@ public interface TicketService {
 
     TicketDTO createTicket(TicketCreationDTO newTicket);
     TicketDTO deleteTicket(String id);
+    TicketDTO findById(String ticketId);
+    void payTicket(TicketDTO ticket);
 }

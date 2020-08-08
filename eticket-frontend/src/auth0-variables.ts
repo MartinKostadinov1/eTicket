@@ -7,9 +7,9 @@ interface AuthConfig {
   }
   
   export const AUTH_CONFIG: AuthConfig = {
-    clientID: 'qvVTugtC1lJqUDpViaQ3ZfAdkMTqtExZ',
-    domain: 'eticket.eu.auth0.com',
-    callbackURL: 'http://localhost:4200/callback',
+    clientID: '',
+    domain: '',
+    callbackURL: '',
     apiUrl: '',
-    redirectUrl: 'http://localhost:4200/'
+    redirectUrl: ''
   };

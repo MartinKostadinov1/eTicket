@@ -24,6 +24,8 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-oauth2-resource-server'
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
 	implementation 'org.springframework.security:spring-security-config'
+	implementation "com.stripe:stripe-java:19.39.0"
+
 
 	compile group: 'com.dropbox.core', name: 'dropbox-core-sdk', version: '3.1.4'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.7'

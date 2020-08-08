@@ -1,12 +1,12 @@
 {
     "/api": {
-        "target": "",
+        "target": "http://localhost:8080/api",
         "secure": false,
         "changeOrigin": true,
         "pathRewrite": {"^/api" : ""}
     },
     "/auth0": {
-        "target": "",
+        "target": "https://eticket.eu.auth0.com",
         "secure": true,
         "changeOrigin": true,
         "pathRewrite": {"^/auth0" : ""}

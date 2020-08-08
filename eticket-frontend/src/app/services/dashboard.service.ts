@@ -4,6 +4,7 @@ import { IDashboardModel } from '../models/dashboard/IDashboardModel';
 import { ITicketModel } from '../models/dashboard/ITicketModel';
 import { IMapTicketModel } from '../models/map/IMapTicketModel';
 import { IDashboardStatusWidget } from '../models/dashboard/IDashboardStatusWidget';
+import { IDashboardChartsModel } from '../models/dashboard/IDashboardChartsModel';
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +14,8 @@ export class DashboardService {
     private userDashboard: IDashboardModel;
 
     private statusWidget: IDashboardStatusWidget;
+
+    private charts: IDashboardChartsModel;
 
     get dahsboard() {
         return this.userDashboard;
@@ -28,6 +31,14 @@ export class DashboardService {
 
     setDahsboardStatusWidget(statusWidget: IDashboardStatusWidget) {
         this.statusWidget = statusWidget;
+    }
+
+    get dashboardCharts() {
+        return this.charts;
+    }
+
+    setDashboardCharts(charts: IDashboardChartsModel) {
+        this.charts = charts;
     }
 
     constructor(private http: HttpClient) { }
@@ -48,7 +59,7 @@ export class DashboardService {
             tickets = tickets.concat(Array.from(vehiclce.tickets).map(t => {
                 let coordinates = t.locationCoordinates.split(", ");
         
-                return {lat: Number(coordinates[0]), lng: Number(coordinates[1]), ticket: t};
+                return {lat: Number(coordinates[0]), lng: Number(coordinates[1]), id: t.id, ticket: t};
             }));
         }
 
@@ -59,6 +70,12 @@ export class DashboardService {
         this.setDahsboardStatusWidget(await this.http.get<IDashboardStatusWidget>('/api/dashboard/status-widget').toPromise());
         return this.dashboardStatusWidget;
     }
+
+    async loadDashboardCharts() {
+        this.setDashboardCharts(await this.http.get<IDashboardChartsModel>('/api/dashboard/charts').toPromise());
+        return this.dashboardCharts;
+    }
+
 
     async getVehicles() {
         if(!this.dahsboard) {
@@ -75,6 +92,14 @@ export class DashboardService {
         }
 
         return this.dashboardStatusWidget;
+    }
+
+    async getDashboardCharts() {
+        if(!this.dashboardCharts) {
+            await this.loadDashboardCharts();
+        }
+
+        return this.dashboardCharts;
     }
 
 }

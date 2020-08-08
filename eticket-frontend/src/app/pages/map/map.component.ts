@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { IMapTicketModel } from 'src/app/models/map/IMapTicketModel';
-declare const google: any;
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-maps',
@@ -11,20 +11,28 @@ declare const google: any;
 })
 export class MapsComponent implements OnInit {
 
-  constructor(private dashboradService: DashboardService) { }
 
+  lat: number = null;
+  lng: number = null;
+  zoom: number = 15;
+
+  constructor(private dashboradService: DashboardService, private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.lat = Number(params['lat']);
+      this.lng = Number(params['lng']);
+      this.route.queryParams = null
+    });
+  }
 
   public markers: IMapTicketModel[] = [];
 
-  lat: number = 51.247680;
-  lng: number = 22.561402780001;
-  zoom: number = 15;
-
   async ngOnInit() {
     let userCurrentLocation = await this.getPosition();
-    this.lat = userCurrentLocation.lat
-    this.lng = userCurrentLocation.lng
 
+    if (!this.lat && !this.lng) {
+      this.lat = userCurrentLocation.lat
+      this.lng = userCurrentLocation.lng
+    }
     this.markers = await this.dashboradService.getAllTickets()
 
   }

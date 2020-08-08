@@ -14,10 +14,11 @@ import { MapsComponent } from '../../pages/map/map.component';
 import { SupportComponent } from '../../pages/support/support.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { DocumentionComponent } from '../../pages/documentation/documention.component';
-import { TablesComponent } from '../../pages/tables/tables.component';
+import { TicketsComponent } from '../../pages/tickets/tickets.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AgmCoreModule } from '@agm/core';
 import { environment } from 'src/environments/environment';
+import { VarDirective } from 'src/app/directives/var.directive';
 // import { ToastrModule } from 'ngx-toastr';
 
 
@@ -37,12 +38,13 @@ import { environment } from 'src/environments/environment';
     DashboardComponent,
     UserProfileComponent,
     DocumentionComponent,
-    TablesComponent,
+    TicketsComponent,
     IconsComponent,
     MapsComponent,
     StatusComponent,
     SupportComponent,
-    PaymentComponent
+    PaymentComponent,
+    VarDirective
   ]
 })
 

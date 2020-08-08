@@ -1,9 +1,31 @@
+<div *ngIf="isLoading" class="loader-box">
+    <div class="loader"></div>
+  </div>
 <form #checkout="ngForm" (ngSubmit)="onSubmit(checkout)" class="checkout">
+
     <div class="form-row">
         <label for="card-info">Card Info</label>
         <div id="card-info" #cardInfo>
         </div>
 
-        <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
-        <button type="submit">Pay</button>
+        <div class="col-12" *ngIf="!isDefaultPaymentSaved">
+            <div class="custom-control custom-control-alternative custom-checkbox">
+                <input [(ngModel)]="savePaymentMethod" name="agreeWithTermsOfUse" class="custom-control-input"
+                    id="customCheckRegister" type="checkbox">
+                <label class="custom-control-label" for="customCheckRegister">
+                    <span class="text-muted">Save payment method as default</span>
+                </label>
+            </div>
+        </div>
+
+
+        <button type="submit" class="noborder">Pay</button>
     </div>
+</form>
+<div *ngIf="isDefaultPaymentSaved" class="text-center">
+    or
+    <br>
+    <button type="button" class="center-button btn btn-primary noborder" (click)="defaultPayment()"
+        *ngIf="isDefaultPaymentSaved">Pay with default method</button>
+
+</div>

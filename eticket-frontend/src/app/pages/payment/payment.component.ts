@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit, OnDestroy, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import { PaymentService } from 'src/app/services/payment.service';
 
 @Component({
     selector: 'app-payment',
     templateUrl: './payment.component.html',
     styleUrls: ['./payment.component.scss']
 })
-export class PaymentComponent implements AfterViewInit, OnDestroy {
+export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild('cardInfo') cardInfo: ElementRef;
     card: any;
@@ -16,7 +17,16 @@ export class PaymentComponent implements AfterViewInit, OnDestroy {
 
     @Input() ticketId: string;
 
-    constructor(private cd: ChangeDetectorRef, private authService: AuthService) { }
+    public savePaymentMethod = false;
+    public isDefaultPaymentSaved = false;
+    public isLoading = true;
+
+    constructor(private cd: ChangeDetectorRef, private authService: AuthService, private paymentService: PaymentService) { }
+
+    async ngOnInit() {
+        this.isDefaultPaymentSaved = await this.paymentService.checkForDefaultPaymentMethod();
+        this.isLoading = false;
+    }
 
 
     ngAfterViewInit() {
@@ -58,9 +68,29 @@ export class PaymentComponent implements AfterViewInit, OnDestroy {
         });
         if (error) {
             console.log('Something is wrong:', error);
-        } else{
-            //Do the payment request here
+        } else {
+            this.isLoading = true;
+            let success = await this.paymentService.payTicket(this.ticketId, token.id, `${this.savePaymentMethod}`);
+            this.isLoading = false;
+
+            if (success) {
+                window.location.reload();
+            } else {
+                alert("Payment failed. Please try again later!");
+            }
         }
 
+    }
+
+    async defaultPayment() {
+        this.isLoading = true;
+        let success = await this.paymentService.payWithDefault(this.ticketId);
+        this.isLoading = false;
+
+        if (success) {
+            window.location.reload();
+        } else {
+            alert("Payment failed. Please try again later!");
+        }
     }
 }

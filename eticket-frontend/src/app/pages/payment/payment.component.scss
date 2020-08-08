@@ -2,7 +2,7 @@ form.checkout {
     max-width: 500px;
     margin: 2rem auto;
     text-align: center;
-    border: 2px solid #eee;
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     padding: 1rem 2rem;
     background: white;
@@ -14,7 +14,7 @@ form.checkout {
   form.checkout button {
     padding: 0.5rem 1rem;
     color: white;
-    background: coral;
+    background: #3aaf85;
     border: none;
     border-radius: 4px;
     margin-top: 1rem;
@@ -39,9 +39,23 @@ form.checkout {
 }
 
 .StripeElement--invalid {
-  border-color: #fa755a;
+  border-color: #3aaf85;
 }
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
+}
+
+
+@media screen and (max-width: 955px) {
+  form.checkout {
+    border: none;
+  }
+}
+
+.center-button {
+  margin: 2rem auto;
+}
+.noborder {
+  border: none;
 }

@@ -5,12 +5,15 @@ import Chart from 'chart.js';
 import {
   chartOptions,
   parseOptions,
-  chartExample1,
-  chartExample2
+  expensesChart,
+  ticketsChart
 } from "../../variables/charts";
 import { ITicketModel } from 'src/app/models/dashboard/ITicketModel';
 import { IVehicleModel } from 'src/app/models/dashboard/IVehicleModel';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { IDashboardChartsModel } from 'src/app/models/dashboard/IDashboardChartsModel';
+import { Month } from 'src/app/models/enums/month.enum';
+import { toTypeScript } from '@angular/compiler';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,57 +23,71 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 export class DashboardComponent implements OnInit {
 
   public datasets: any;
-  public data: any;
-  public salesChart;
-  public clicked: boolean = true;
-  public clicked1: boolean = false;
 
   public vehicles: any[] = []
 
   public locations: any[] = []
 
-  public totalTicketsMonthly = 12;
+  public totalTicketsMonthly = 0;
+
+  private chartsData: IDashboardChartsModel = { expenses: new Map(), tickets: new Map() };
 
 
   constructor(private dashboardService: DashboardService) { }
 
   async ngOnInit() {
 
-    this.datasets = [
-      [0, 20, 10, 30, 15, 40, 20, 60, 60],
-      [0, 20, 5, 25, 10, 30, 15, 40, 40]
-    ];
-    this.data = this.datasets[0];
-
-
-    var chartOrders = document.getElementById('chart-orders');
-
-    parseOptions(Chart, chartOptions());
-
-
-    var ordersChart = new Chart(chartOrders, {
-      type: 'bar',
-      options: chartExample2.options,
-      data: chartExample2.data
-    });
-
-    var chartSales = document.getElementById('chart-sales');
-
-    this.salesChart = new Chart(chartSales, {
-      type: 'line',
-      options: chartExample1.options,
-      data: chartExample1.data
-    });
-
-    
+    await this.loadCharts();
     await this.mostVisitedPlaces();
     this.totalTicketsMonthly = (await this.dashboardService.getDashboardStatusWidget()).monthlyTrips;
     this.mostUsedVehicles();
+
+    this.vehicles = this.vehicles.sort((a, b) => b.tickets.length - a.tickets.length)
+
   }
 
-  public updateOptions() {
-    this.salesChart.data.datasets[0].data = this.data;
-    this.salesChart.update();
+  private async loadCharts() {
+
+    this.chartsData = await this.dashboardService.getDashboardCharts();
+
+    let ticketsData = [];
+    let expensesData = [];
+
+    Object.keys(Month).forEach(m => {
+      ticketsData[Number(Month[m])] = Number(this.chartsData.tickets[m]) || 0;
+      expensesData[Number(Month[m])] = Number(this.chartsData.expenses[m]) || 0;
+    })
+
+    ticketsChart.data.datasets.push({
+      label: "Tickets",
+      data: ticketsData
+    })
+
+    expensesChart.data.datasets.push({
+      label: 'Expenses',
+      data: expensesData
+    })
+
+    parseOptions(Chart, chartOptions());
+
+    var chartTickets = document.getElementById('chart-tickets');
+
+    new Chart(chartTickets, {
+      type: 'bar',
+      options: ticketsChart.options,
+      data: ticketsChart.data
+    });
+
+
+
+    var chartExpenses = document.getElementById('chart-expenses');
+
+    new Chart(chartExpenses, {
+      type: 'line',
+      options: expensesChart.options,
+      data: expensesChart.data
+    });
+
   }
 
   // Claculates what part of all tickets is taken by the tickets of this vehicle
@@ -78,7 +95,15 @@ export class DashboardComponent implements OnInit {
   public calcVehicleUsage(id: string) {
     let vehicle = this.vehicles.find(v => v.id == id);
 
-    let result = (vehicle.tickets.length / this.totalTicketsMonthly) * 100;
+    let dateNow = new Date();
+
+    let tickets = vehicle.tickets.filter(t => !t.isDeleted && new Date(t.createdOn).getMonth() == dateNow.getMonth());
+
+    if (tickets.length == 0) {
+      return [{ result: 0, background: '', fixedResult: 0 }];
+    }
+
+    let result = (tickets.length / this.totalTicketsMonthly) * 100;
     let background = '';
     if (result <= 25) {
       background = 'bg-gradient-danger';
@@ -100,6 +125,7 @@ export class DashboardComponent implements OnInit {
 
   private async mostVisitedPlaces() {
     this.tickets = await this.dashboardService.getAllTickets();
+    this.tickets = this.tickets.filter(t => !t.ticket.isDeleted);
     let locations: { [locationName: string]: { tickets: ITicketModel[], vehicles: IVehicleModel[] } } = {};
     this.userVehicles = Array.from(await this.dashboardService.getVehicles());
 
@@ -111,10 +137,10 @@ export class DashboardComponent implements OnInit {
       locations[ticket.ticket.locationName].tickets.push(ticket.ticket);
     }
 
-    let topLocations = Object.keys(locations).sort((a, b) => locations[a].tickets.length - locations[b].tickets.length)
+    let topLocations = Object.keys(locations).sort((a, b) => locations[b].tickets.length -locations[a].tickets.length)
 
-    if(topLocations.length >= 5) topLocations = topLocations.slice(0, 4);
-    
+    if (topLocations.length >= 5) topLocations = topLocations.slice(0, 4);
+
     let count = 1;
     for (const location of topLocations) {
       let locationResult = {
@@ -135,7 +161,7 @@ export class DashboardComponent implements OnInit {
         id: vehicle.id,
         registrationNumber: vehicle.registrationNumber,
         tickets: Array.from(vehicle.tickets)
-      },)
+      })
     }
 
     this.vehicles = this.vehicles.sort((a, b) => a.tickets - b.tickets);

@@ -1,5 +1,6 @@
 package com.mkostadinov.eticketbackend.service;
 
+import com.mkostadinov.eticketbackend.model.dto.dashboard.ChartsDataDTO;
 import com.mkostadinov.eticketbackend.model.dto.dashboard.DashboardDTO;
 import com.mkostadinov.eticketbackend.model.dto.dashboard.DashboardStatusWidgetDTO;
 
@@ -10,4 +11,6 @@ public interface DashboardService {
     DashboardDTO getUserDashboard(Principal principal);
 
     DashboardStatusWidgetDTO getStatusWidget(Principal principal);
+
+    ChartsDataDTO getChartsData(Principal principal);
 }

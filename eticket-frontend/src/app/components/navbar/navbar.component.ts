@@ -45,6 +45,10 @@ export class NavbarComponent implements OnInit {
         if(title == '/map') {
           return 'E-Map';
         }
+
+        if(title == '/etickets') {
+          return 'E-Tickets';
+        }
         
         if(this.listTitles[item].path === title){
             return this.listTitles[item].title;
