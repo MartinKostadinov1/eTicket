@@ -4,6 +4,7 @@ import com.mkostadinov.eticketbackend.model.dto.user.AuthProviderUserDTO;
 import com.mkostadinov.eticketbackend.model.dto.user.UserDTO;
 import com.mkostadinov.eticketbackend.model.dto.user.UserRegisterDTO;
 import com.mkostadinov.eticketbackend.model.dto.user.UserUpdateProfileDTO;
+import com.mkostadinov.eticketbackend.model.dto.vehicle.VehicleDTO;
 import com.mkostadinov.eticketbackend.model.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,4 +21,5 @@ public interface UserService {
     UserDTO updateUserProfileBackgroundPicture(MultipartFile imageFile, String type, Principal principal);
     UserDTO findByDriverLicenseId(String driverLicenseId);
     void saveUser(UserDTO userDTO);
+    UserDTO findByVehiclesContaining(VehicleDTO vehicleDTO);
 }

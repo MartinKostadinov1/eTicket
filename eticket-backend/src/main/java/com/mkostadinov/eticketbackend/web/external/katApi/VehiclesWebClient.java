@@ -42,22 +42,32 @@ public class VehiclesWebClient {
     }
 
     public Flux<VehiclesApiResponseDTO> getRegistrationNumbers(String userDrivingLicenseId) {
-        this.authenticate();
-        return webClient.get()
-                .uri(ETICKET_KAT_API_URL + "/vehicles/" + userDrivingLicenseId)
-                .header("Auth",  this.accessToken)
-                .retrieve()
-                .bodyToFlux(VehiclesApiResponseDTO.class)
-                .doOnError(IOException.class, e -> log.error(e.getMessage()));
+        try {
+            this.authenticate();
+            return webClient.get()
+                    .uri(ETICKET_KAT_API_URL + "/vehicles/" + userDrivingLicenseId)
+                    .header("Auth", this.accessToken)
+                    .retrieve()
+                    .bodyToFlux(VehiclesApiResponseDTO.class)
+                    .doOnError(IOException.class, e -> log.error(e.getMessage()));
+        } catch (Exception e) {
+            log.error("KAT API connection refused");
+            return null;
+        }
     }
 
     public Flux<VehiclesApiResponseDTO> getAllRegistrationNumbers() {
-        this.authenticate();
-        return webClient.get()
-                .uri(ETICKET_KAT_API_URL + "/vehicles/all")
-                .header("Auth",  this.accessToken)
-                .retrieve()
-                .bodyToFlux(VehiclesApiResponseDTO.class);
+        try {
+            this.authenticate();
+            return webClient.get()
+                    .uri(ETICKET_KAT_API_URL + "/vehicles/all")
+                    .header("Auth", this.accessToken)
+                    .retrieve()
+                    .bodyToFlux(VehiclesApiResponseDTO.class);
+        } catch (Exception e) {
+            log.error("KAT API connection refused");
+            return null;
+        }
     }
 
     private void authenticate() {

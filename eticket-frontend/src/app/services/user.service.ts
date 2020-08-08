@@ -56,7 +56,7 @@ export class UserSerivce {
     }
 
     async register(userData: IUserRegisterModel): Promise<any> {
-        let result = await (this.http.post<IUserModel>(`/api/users/register`, userData).toPromise()).catch(e => e);
+        let result = await (this.http.post<IUserModel>(`/api/users/register`, userData, { observe: 'response' }).toPromise()).catch(e => e);
 
         return result;
     }
@@ -70,8 +70,11 @@ export class UserSerivce {
     }
 
     async updateProfile(userData: IUpdateUserModel) {
-        let result = await this.http.put<IUserModel>('/api/users/profile', userData).toPromise().catch(e => e);
-        this.setUser(result);
+        let result = await this.http.put<IUserModel>('/api/users/profile', userData, { observe: 'response' }).toPromise().catch(e => e);
+        if(result && result.status == 200) {
+            this.setUser(result.body);
+        }
+        return result;
     }
 
     async updateProfilePicture(imageFile: File): Promise<IUserModel> {

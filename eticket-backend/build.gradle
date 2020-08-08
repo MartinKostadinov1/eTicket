@@ -6,7 +6,6 @@ plugins {
 }
 
 group = 'com.mkostadinov'
-version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '14'
 
 repositories {
@@ -38,6 +37,7 @@ dependencies {
 
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
 	compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+	compile 'org.springframework.boot:spring-boot-starter-mail'
 
 	testImplementation 'org.awaitility:awaitility:3.1.2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

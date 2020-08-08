@@ -204,6 +204,12 @@ public class UserServiceImpl implements UserService {
         this.userRepository.saveAndFlush(this.modelMapper.map(userDTO, User.class));
     }
 
+    @Override
+    public UserDTO findByVehiclesContaining(VehicleDTO vehicleDTO) {
+        return this.userRepository.findByVehiclesContaining(this.modelMapper.map(vehicleDTO, Vehicle.class))
+                .map(u -> this.modelMapper.map(u, UserDTO.class)).orElse(null);
+    }
+
 
     private AuthProviderUserDTO updateAuthProviderUser(AuthProviderUserUpdateDTO authProviderUserUpdateDTO, String authProviderUserId) {
         HttpHeaders headers = new HttpHeaders();

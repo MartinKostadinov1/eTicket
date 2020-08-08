@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
 
-    @ExceptionHandler({UnauthorizedUserException.class})
+    @ExceptionHandler({UnauthorizedUserException.class, NoHandlerFoundException.class})
     public ModelAndView userIsNotAuthorized() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error");
@@ -44,5 +48,6 @@ public class ExceptionHandlerControllerAdvice {
     public ResponseEntity<ErrorResponse> invalidAccessTokenException(Exception e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(e.getMessage()));
     }
+
 
 }

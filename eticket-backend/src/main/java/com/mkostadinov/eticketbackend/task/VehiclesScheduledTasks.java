@@ -32,13 +32,17 @@ public class VehiclesScheduledTasks {
 
     @Scheduled(cron = "0 0/30 * * * ?")
     public void addAllNewVehicles() {
-        Flux<VehiclesApiResponseDTO> allRegistrationNumbers = this.vehiclesWebClient.getAllRegistrationNumbers();
-        if (allRegistrationNumbers != null) {
-            allRegistrationNumbers.subscribe(v -> {
-                this.vehicleService.createVehicle(new VehicleCreationDTO()
-                        .setRegistrationNumber(v.getVehicleRegistrationNumber())
-                        .setOwnerDrivingLicenseId(v.getOwnerDriverLicenseId()));
-            });
+        try {
+            Flux<VehiclesApiResponseDTO> allRegistrationNumbers = this.vehiclesWebClient.getAllRegistrationNumbers();
+            if (allRegistrationNumbers != null) {
+                allRegistrationNumbers.subscribe(v -> {
+                    this.vehicleService.createVehicle(new VehicleCreationDTO()
+                            .setRegistrationNumber(v.getVehicleRegistrationNumber())
+                            .setOwnerDrivingLicenseId(v.getOwnerDriverLicenseId()));
+                });
+            }
+        }catch (Exception e) {
+            log.error("KAT API connection refused.");
         }
 
     }

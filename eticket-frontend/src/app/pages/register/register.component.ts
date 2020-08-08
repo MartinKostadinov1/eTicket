@@ -61,9 +61,6 @@ export class RegisterComponent implements OnInit {
         this.errors[e.field] = e.defaultMessage;
       }
     }
-
-
-
   }
 
   async onSubmit(form: NgForm) {

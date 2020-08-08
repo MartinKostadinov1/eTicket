@@ -2,6 +2,7 @@ package com.mkostadinov.eticketbackend.model.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -48,7 +49,8 @@ public class UserUpdateProfileDTO {
     }
 
 
-    @NotBlank(message = "Username is required")
+    @NotNull(message = "Username is required")
+    @Length(min = 2, max = 20, message = "Username must be between 2 and 20 characters")
     public String getUsername() {
         return username;
     }
@@ -59,7 +61,8 @@ public class UserUpdateProfileDTO {
     }
 
 
-    @NotBlank(message = "First name is required")
+    @NotNull(message = "First name is required")
+    @Length(min = 2, max = 20, message = "First name must be between 2 and 20 characters")
     public String getFirstName() {
         return firstName;
     }
@@ -69,7 +72,8 @@ public class UserUpdateProfileDTO {
         return this;
     }
 
-    @NotBlank(message = "Last name is required")
+    @NotNull(message = "Last name is required")
+    @Length(min = 2, max = 30, message = "First name must be between 2 and 20 characters")
     public String getLastName() {
         return lastName;
     }
@@ -79,7 +83,8 @@ public class UserUpdateProfileDTO {
         return this;
     }
 
-    @NotBlank(message = "Country name is required")
+    @NotNull(message = "Country is required")
+    @Length(min = 2, max = 40, message = "Country name must be at between 2 and 40 character")
     public String getCountry() {
         return country;
     }
@@ -89,7 +94,8 @@ public class UserUpdateProfileDTO {
         return this;
     }
 
-    @NotBlank(message = "City name is required")
+    @NotNull(message = "City required")
+    @Length(min = 2, max = 20, message = "City name must be at between 2 and 20 character")
     public String getCity() {
         return city;
     }
@@ -99,7 +105,8 @@ public class UserUpdateProfileDTO {
         return this;
     }
 
-    @NotBlank(message = "Address is required")
+    @NotNull(message = "Address is required")
+    @Length(min = 3, max = 30, message = "Address must be at between 2 and 30 character")
     public String getAddress() {
         return address;
     }
@@ -109,7 +116,8 @@ public class UserUpdateProfileDTO {
         return this;
     }
 
-    @NotBlank(message = "Postal code is required")
+    @NotNull(message = "Post code is required")
+    @Length(min = 4, max = 6, message = "Post code must be at between 4 and 6 digits")
     public String getPostCode() {
         return postCode;
     }
@@ -128,7 +136,8 @@ public class UserUpdateProfileDTO {
         return this;
     }
 
-    @NotBlank(message = "Phone number is required")
+    @NotNull(message = "Phone number is required")
+    @Length(min = 5, max = 15, message = "Phone number must be at between 5 and 15 digits")
     public String getPhoneNumber() {
         return phoneNumber;
     }

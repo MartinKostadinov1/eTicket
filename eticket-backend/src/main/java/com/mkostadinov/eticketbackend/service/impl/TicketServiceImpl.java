@@ -6,6 +6,7 @@ import com.mkostadinov.eticketbackend.model.dto.ticket.TicketDTO;
 import com.mkostadinov.eticketbackend.model.dto.vehicle.VehicleDTO;
 import com.mkostadinov.eticketbackend.model.entity.Ticket;
 import com.mkostadinov.eticketbackend.repository.TicketRepository;
+import com.mkostadinov.eticketbackend.service.EmailService;
 import com.mkostadinov.eticketbackend.service.TicketService;
 import com.mkostadinov.eticketbackend.service.VehicleService;
 import org.modelmapper.ModelMapper;
@@ -22,12 +23,14 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final VehicleService vehicleService;
     private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
     @Autowired
-    public TicketServiceImpl(TicketRepository ticketRepository, VehicleService vehicleService, ModelMapper modelMapper) {
+    public TicketServiceImpl(TicketRepository ticketRepository, VehicleService vehicleService, ModelMapper modelMapper, EmailService emailService) {
         this.ticketRepository = ticketRepository;
         this.vehicleService = vehicleService;
         this.modelMapper = modelMapper;
+        this.emailService = emailService;
     }
 
     @Override
@@ -48,6 +51,8 @@ public class TicketServiceImpl implements TicketService {
         vehicle.getTickets().add(ticketDTO);
 
         this.vehicleService.saveVehicle(vehicle);
+
+        this.emailService.sendNewTicketEmail(vehicle, ticketDTO.getDescription(), ticketDTO.getCreatedOn());
 
         return ticketDTO;
     }

@@ -35,6 +35,8 @@ export class UserProfileComponent implements OnInit {
   ticketsCount: number = 0;
   vehiclesCount: number = 0;
 
+  errors: string[] = []
+
   async ngOnInit() {
     this.currentUser = await this.userService.getCurrentUser().toPromise() || null;
     this.isLoading = false;
@@ -43,6 +45,14 @@ export class UserProfileComponent implements OnInit {
 
     this.ticketsCount = dashboradData.allPaidTickets;
     this.vehiclesCount = dashboradData.vehicleCount;
+  }
+
+  private triggetValidations(errors: any[]) {
+    if (errors) {
+      for (const e of errors) {
+        this.errors[e.field] = e.defaultMessage;
+      }
+    }
   }
 
 
@@ -62,9 +72,21 @@ export class UserProfileComponent implements OnInit {
       phoneNumber: this.currentUser.phoneNumber
     }
 
-    await this.userService.updateProfile(userToUpdate);
-    this.currentUser = await this.userService.getCurrentUser().toPromise() || null;
-    this.isLoading = false;
+
+    try {
+      let result = await this.userService.updateProfile(userToUpdate);
+
+      if (result.status && result.status != 200) {
+        this.triggetValidations(result.errors)
+      } else {
+        this.currentUser = await this.userService.getCurrentUser().toPromise() || null;
+      }
+      this.isLoading = false;
+    } catch (e) {
+      this.isLoading = false;
+      alert("Something went wrong. Please try again later")
+    }
+
   }
 
   async importProfilePicture(event) {
@@ -75,11 +97,17 @@ export class UserProfileComponent implements OnInit {
       return
     }
 
-    let updatedUser = await this.userService.updateProfilePicture(event.target.files[0]).catch(_ => { this.isLoading = false; return null; });
-    this.currentUser = updatedUser;
-    this.userService.setUser(updatedUser);
-    this.isLoading = false;
-    window.location.reload();
+    try {
+      let updatedUser = await this.userService.updateProfilePicture(event.target.files[0]);
+      this.currentUser = updatedUser;
+      this.userService.setUser(updatedUser);
+      this.isLoading = false;
+      window.location.reload();
+    } catch (e) {
+      this.isLoading = false;
+      alert("Something went wrong.  Please try again later")
+    }
+
 
   }
 
@@ -90,10 +118,16 @@ export class UserProfileComponent implements OnInit {
       alert("No file selected!");
       return
     }
-    let updatedUser = await this.userService.updateProfileBackgroundPicture(event.target.files[0]).catch(_ => { this.isLoading = false; return null; });
-    this.currentUser = updatedUser;
-    this.userService.setUser(updatedUser);
-    this.isLoading = false;
+
+    try {
+      let updatedUser = await this.userService.updateProfileBackgroundPicture(event.target.files[0]);
+      this.currentUser = updatedUser;
+      this.userService.setUser(updatedUser);
+      this.isLoading = false;
+    } catch (e) {
+      this.isLoading = false;
+      alert("Something went wrong.  Please try again later")
+    }
 
   }
 

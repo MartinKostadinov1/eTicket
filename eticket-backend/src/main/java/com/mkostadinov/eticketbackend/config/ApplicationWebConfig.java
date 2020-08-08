@@ -10,10 +10,7 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 public class ApplicationWebConfig implements WebMvcConfigurer {
@@ -36,21 +33,18 @@ public class ApplicationWebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new ApplicationAccessInterceptor(this.applicationAccessToken)).addPathPatterns("/api/**").excludePathPatterns("/api/external/**");
         registry.addInterceptor(new ApiInterceptor(this.apiToken)).addPathPatterns("/api/external/**");
     }
-//
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/notFound").setViewName("errors/403");
-//        registry.addViewController("/error").setViewName("errors/403");
-//    }
-//
-//    @Bean
-//    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
-//        return container -> {
-//            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
-//                    "/notFound"));
-//            container.addErrorPages(new ErrorPage(HttpStatus.UNAUTHORIZED,
-//                    "/error"));
-//        };
-//    }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/notFound").setViewName("errors/error");
+    }
+
+
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
+        return container -> {
+            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
+                    "/notFound"));
+        };
+    }
 }
