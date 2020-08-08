@@ -1,23 +1,21 @@
-# eTicket Frontend
+# eTicket Backend
 
 eTicket is a WebPlatform that provides you easy fast and secure payments of your BRIDGE, TOLL, PARKING and etc taxes
 
 ## Installation
 
-Use the npm
-
-```bash
-npm install
-```
+You will need gradlew and docker for this
 
 ## Usage
 
 ```bash
-npm start
+cd local
+docker-compose -f mysql-docker-compose.yml up
+cd ..
+./gradlew build
 ```
 
 ## Contributing
-Thanks to Creative time - this project uses their great Aragon Angular Dashboard
 The project is under MLP2 license - for usage please contact me
 
 ## License
